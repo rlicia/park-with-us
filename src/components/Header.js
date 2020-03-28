@@ -12,14 +12,16 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <View style={styles.headerContainer}>
-                {backButton ?
-                    <TouchableOpacity
-                        style={styles.headerLeft}
-                        onPress={() => navigation.goBack()}
-                    >
-                        <Icon name='chevron-left' size={26} />
-                    </TouchableOpacity>
-                : null}
+                <View style={styles.headerLeft}>
+                    {backButton ?
+                        <TouchableOpacity
+                            style={styles.backButton}
+                            onPress={() => navigation.goBack()}
+                        >
+                            <Icon name='chevron-left' size={26} />
+                        </TouchableOpacity>
+                    : null}
+                </View>
                 <View style={styles.headerCenter}>
                     <Text style={styles.headerTitle}>
                         {title}
@@ -65,6 +67,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     headerLeft: {
+        flex: 1
+    },
+    backButton: {
         flex: 1,
         alignItems: 'center'
     },
