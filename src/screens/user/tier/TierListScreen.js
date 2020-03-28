@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const LoginHomeScreen = () => {
+const TierListScreen = () => {
     return (
         <View>
-            <Text>Login Home Screen</Text>
+            <Text>TierList Screen</Text>
         </View>
     );
 };
@@ -13,4 +13,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default LoginHomeScreen;
+export default TierListScreen;
