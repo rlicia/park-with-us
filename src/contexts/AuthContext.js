@@ -39,10 +39,10 @@ const tryLocalSignin = dispatch => async () => {
             const account = await router.get('/account');
             dispatch({ type: 'fetch_account', payload: account.data.account });
             if (account.data.account.status === 1) {
-                navigate('License');
+                navigate('Client');
             }
             if (account.data.account.status === 0) {
-                navigate('UserHome');
+                navigate('User');
             }
         } else {
             navigate('LoginHome');
@@ -81,10 +81,10 @@ const signup = dispatch => async ({ username, password, confirmPassword, firstNa
         const account = await router.get('/account');
         dispatch({ type: 'fetch_account', payload: account.data.account });
         if (account.data.account.status === 1) {
-            navigate('License');
+            navigate('Client');
         }
         if (account.data.account.status === 0) {
-            navigate('UserHome');
+            navigate('User');
         }
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
@@ -106,10 +106,10 @@ const signin = dispatch => async ({ username, password }) => {
         const account = await router.get('/account');
         dispatch({ type: 'fetch_account', payload: account.data.account });
         if (account.data.account.status === 1) {
-            navigate('License');
+            navigate('Client');
         }
         if (account.data.account.status === 0) {
-            navigate('UserHome');
+            navigate('User');
         }
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
@@ -124,21 +124,87 @@ const signout = dispatch => async () => {
 };
 
 //fetch account
+const navigateTo = dispatch => async (routeName, params) => {
+    try {
+        navigate(routeName, params);
+        const response = await router.get('/account');
+        dispatch({ type: 'fetch_account', payload: response.data.account });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
 
 //edit profile
+const editAccount = dispatch => async ({ firstName, lastName, email }) => {
+    if (!firstName || !lastName || !email) {
+        return dispatch({ type: 'add_error', payload: 'Must provide all fields' });
+    }
+
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!reg.test(email) || email !== email.toLowerCase()) {
+        return dispatch({ type: 'add_error', payload: 'Invalid Email' });
+    }
+
+    try {
+        dispatch({ type: 'loading', payload: 'Saving...' });
+        await router.put('/account', { firstName, lastName, email });
+        const account = await router.get('/account');
+        dispatch({ type: 'fetch_account', payload: account.data.account });
+        navigate('Setting');
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
 
 //change password
+const changePassword = dispatch => async ({ password, newPassword, confirmNewPassword }) => {
+    if (!password || !newPassword || !confirmNewPassword) {
+        return dispatch({ type: 'add_error', payload: 'Must provide all fields' });
+    }
+    if (newPassword !== confirmNewPassword) {
+        return dispatch({ type: 'add_error', payload: 'Password Mismatch' });
+    }
+    if (newPassword.length < 8) {
+        return dispatch({ type: 'add_error', payload: 'Password must be at least 8 characters' });
+    }
+    if (password === newPassword) {
+        return dispatch({ type: 'add_error', payload: 'Current and new password are same' });
+    }
+
+    try {
+        dispatch({ type: 'loading', payload: 'Saving...' });
+        await router.put('/account/password', { password, newPassword });
+        const account = await router.get('/account');
+        dispatch({ type: 'fetch_account', payload: account.data.account });
+        navigate('Setting');
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
 
 //refresh
+const refresh = dispatch => async () => {
+    try {
+        dispatch({ type: 'loading', payload: 'Refreshing...' });
+        const response = await router.get('/account');
+        dispatch({ type: 'fetch_account', payload: response.data.account });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
 
 export const { Context, Provider } = createDataContext(
     authReducer,
     {
-       clearErrorMessage,
-       tryLocalSignin,
        signup,
        signin,
-       signout
+       signout,
+       tryLocalSignin,
+       navigateTo,
+       editAccount,
+       changePassword,
+       clearErrorMessage,
+       refresh
     },
     { token: null, account: {}, errorMessage: '', loading: '' }
 );
