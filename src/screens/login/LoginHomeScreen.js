@@ -1,12 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
+
+import { Context as AuthContext } from '../../contexts/AuthContext';
+
+import Loader from '../../components/Loader';
 
 const { height } = Dimensions.get('window');
 
 const LoginHomeScreen = ({ navigation }) => {
+    const { state, tryLocalSignin } = useContext(AuthContext);
+
+    useEffect(() => {
+        tryLocalSignin();
+    },[]);
+
     return (
         <>
+            <Loader
+                title={state.loading}
+                loading={state.loading ? true : false}
+            />
             <View style={styles.topContainer}>
                 <Text style={styles.title}>
                     Park With Us
@@ -43,7 +57,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 35,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#204A87'
     },
     bottomContainer: {
         flex: 1,
@@ -56,7 +71,7 @@ const styles = StyleSheet.create({
     },
     signinButton: {
         height: 50,
-        backgroundColor: '#00AB66',
+        backgroundColor: '#204A87',
         borderRadius: 25
     },
     signinTitle: {
@@ -66,12 +81,12 @@ const styles = StyleSheet.create({
         height: 50,
         marginVertical: 10,
         borderRadius: 25,
-        borderColor: '#00AB66',
-        borderWidth: 1
+        borderColor: '#204A87',
+        borderWidth: 1.5
     },
     signupTitle: {
         fontWeight: 'bold',
-        color: '#00AB66'
+        color: '#204A87'
     }
 });
 
