@@ -56,7 +56,7 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
 const styles = StyleSheet.create({
     safeAreaContainer: {
         flex: 1,
-        backgroundColor: '#204A87',
+        backgroundColor: '#00AB66',
         paddingBottom: 0
     },
     headerContainer: {
