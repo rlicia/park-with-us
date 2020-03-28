@@ -57,8 +57,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 35,
-        fontWeight: 'bold',
-        color: '#204A87'
+        fontWeight: 'bold'
     },
     bottomContainer: {
         flex: 1,
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
     },
     signinButton: {
         height: 50,
-        backgroundColor: '#204A87',
+        backgroundColor: '#00AB66',
         borderRadius: 25
     },
     signinTitle: {
@@ -81,12 +80,12 @@ const styles = StyleSheet.create({
         height: 50,
         marginVertical: 10,
         borderRadius: 25,
-        borderColor: '#204A87',
+        borderColor: '#00AB66',
         borderWidth: 1.5
     },
     signupTitle: {
         fontWeight: 'bold',
-        color: '#204A87'
+        color: '#00AB66'
     }
 });
 
