@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Context as AuthContext } from '../../contexts/AuthContext';
@@ -74,19 +74,19 @@ const SettingScreen = ({ navigation }) => {
         <Header
             title='Setting'
             disableActivation={true}
+            headerRight={
+                <TouchableOpacity
+                    onPress={refresh}
+                >
+                    <Icon name='refresh' size={26} />
+                </TouchableOpacity>
+            }
         >
             <Loader
                 title={state.loading}
                 loading={state.loading ? true : false}
             />
-            <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        onRefresh={() => refresh()}
-                        refreshing={state.loading}
-                    />
-                }
-            >
+            <ScrollView>
                 <View style={styles.topContainer}>
                     <TextForm 
                         title='Username'
