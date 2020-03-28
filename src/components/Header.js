@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
         flex: 1
     },
     backButton: {
-        flex: 1,
         alignItems: 'center'
     },
     headerCenter: {
