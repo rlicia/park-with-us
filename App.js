@@ -2,12 +2,18 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createSwitchNavigator } from '@react-navigation/compat';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { setNavigator } from './src/navigationRef';
 
 //Context
 import { Provider as AuthProvider } from './src/contexts/AuthContext';
+import { Provider as TierProvider } from './src/contexts/TierContext';
+import { Provider as ParkingProvider } from './src/contexts/ParkingContext';
+import { Provider as AccountProvider } from './src/contexts/AccountContext';
+import { Provider as TransactionProvider } from './src/contexts/TransactionContext';
 
 //login flow
 import LoginHomeScreen from './src/screens/login/LoginHomeScreen';
@@ -204,7 +210,7 @@ const AdminFlow = () => {
 };
 
 const tabBarOptions = {
-  activeTintColor: '#204A87',
+  activeTintColor: '#00AB66',
   inactiveTintColor: 'gray'
 }
 
@@ -274,7 +280,20 @@ const UserFlow = () => {
 const App = () => {
   return (
     <NavigationContainer ref={(navigator) => setNavigator(navigator)}>
-      <LoginFlow />
+      <Stack.Navigator screenOptions={stackScreenOptions}>
+        <Stack.Screen
+          name="LoginFlow"
+          component={LoginFlow}
+        />
+        <Stack.Screen
+          name="Client"
+          component={ClientFlow}
+        />
+        <Stack.Screen
+          name="User"
+          component={UserFlow}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
@@ -282,7 +301,17 @@ const App = () => {
 export default () => {
   return (
     <AuthProvider>
-      <App />
+      <TierProvider>
+        <ParkingProvider>
+          <AccountProvider>
+            <TransactionProvider>
+              <SafeAreaProvider>
+                <App />
+              </SafeAreaProvider>
+            </TransactionProvider>
+          </AccountProvider>
+        </ParkingProvider>
+      </TierProvider>
     </AuthProvider>
   );
 };
