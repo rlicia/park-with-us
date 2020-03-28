@@ -4,6 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { setNavigator } from './src/navigationRef';
+
+//Context
+import { Provider as AuthProvider } from './src/contexts/AuthContext';
+
 //login flow
 import LoginHomeScreen from './src/screens/login/LoginHomeScreen';
 import SignInScreen from './src/screens/login/SignInScreen';
@@ -199,7 +204,7 @@ const AdminFlow = () => {
 };
 
 const tabBarOptions = {
-  activeTintColor: '#00AB66',
+  activeTintColor: '#204A87',
   inactiveTintColor: 'gray'
 }
 
@@ -268,7 +273,7 @@ const UserFlow = () => {
 
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={(navigator) => setNavigator(navigator)}>
       <LoginFlow />
     </NavigationContainer>
   );
@@ -276,6 +281,8 @@ const App = () => {
 
 export default () => {
   return (
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   );
 };
