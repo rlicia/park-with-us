@@ -1,11 +1,95 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const UserHomeScreen = () => {
+import { Context as AuthContext } from '../../contexts/AuthContext';
+
+import Header from '../../components/Header';
+import Loader from '../../components/Loader';
+
+const ButtonForm = ({ title, icon, onSubmit }) => {
     return (
-        <View>
-            <Text>UserHome Screen</Text>
-        </View>
+        <TouchableHighlight
+            style={button.container}
+            underlayColor='#00000030'
+            onPress={onSubmit}
+        >
+            <View style={button.button}>
+                <View style={button.icon}>{icon}</View>
+                <Text style={button.title}>{title}</Text>
+            </View>
+        </TouchableHighlight>
+    );
+};
+
+const button = StyleSheet.create({
+    container: {
+        height: 80,
+        paddingHorizontal: 15
+    },
+    button: {
+        flex: 1,
+        paddingVertical: 20,
+        paddingLeft: 5,
+        borderBottomWidth: 1,
+        borderColor: '#D4D4D4',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    icon: {
+        flex: 1,
+        alignItems: 'center'
+    },
+    title: {
+        flex: 9,
+        fontSize: 18,
+        paddingLeft: 5
+    }
+});
+
+const UserHomeScreen = ({ navigation }) => {
+    const { state, navigateTo, refresh } = useContext(AuthContext);
+    
+    return (
+        <Header
+            title='Home'
+            userScreen={true}
+            headerRight={
+                <TouchableOpacity
+                    style={{ flex: 1, alignItems: 'center' }}
+                    onPress={refresh}
+                >
+                    <Icon name='refresh' size={26} />
+                </TouchableOpacity>
+            }
+        >
+            <Loader
+                title={state.loading}
+                loading={state.loading ? true : false}
+            />
+            <ScrollView>
+                <ButtonForm 
+                    title='Parking Space'
+                    icon={<Icon name='car' size={22} />}
+                    onSubmit={() => navigateTo('EditSlot')}
+                />
+                <ButtonForm 
+                    title='Client & User'
+                    icon={<Icon name='users' size={22} />}
+                    onSubmit={() => navigation.navigate('AccountHome')}
+                />
+                <ButtonForm 
+                    title='Tier'
+                    icon={<Icon name='pencil' size={22} />}
+                    onSubmit={() => navigation.navigate('TierHome')}
+                />
+                <ButtonForm 
+                    title='Create User Account'
+                    icon={<Icon name='user-plus' size={22} />}
+                    onSubmit={() => navigateTo('CreateUser')}
+                />
+            </ScrollView>
+        </Header>
     );
 };
 
