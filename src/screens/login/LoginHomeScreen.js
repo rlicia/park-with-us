@@ -1,16 +1,78 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { Button } from 'react-native-elements';
 
-const LoginHomeScreen = () => {
+const { height } = Dimensions.get('window');
+
+const LoginHomeScreen = ({ navigation }) => {
     return (
-        <View>
-            <Text>Login Home Screen</Text>
-        </View>
+        <>
+            <View style={styles.topContainer}>
+                <Text style={styles.title}>
+                    Park With Us
+                </Text>
+            </View>
+            <View style={styles.bottomContainer}>
+                <Button
+                    title="SIGN IN"
+                    onPress={() => navigation.navigate('SignIn')}
+                    buttonStyle={styles.signinButton}
+                    titleStyle={styles.signinTitle}
+                    containerStyle={styles.buttonContainer}
+                />
+                <Button
+                    title="CREATE ACCOUNT"
+                    onPress={() => navigation.navigate('SignUp')}
+                    type='outline'
+                    buttonStyle={styles.signupButton}
+                    titleStyle={styles.signupTitle}
+                    containerStyle={styles.buttonContainer}
+                />
+            </View>
+        </>
     );
 };
 
 const styles = StyleSheet.create({
-
+    topContainer: {
+        position: 'absolute',
+        alignItems: 'center',
+        top: height * 0.4,
+        left: 0,
+        right: 0
+    },
+    title: {
+        fontSize: 35,
+        fontWeight: 'bold'
+    },
+    bottomContainer: {
+        flex: 1,
+        marginTop: height * 0.5,
+        marginHorizontal: 50,
+        justifyContent: 'center'
+    },
+    buttonContainer: {
+        marginVertical: 10
+    },
+    signinButton: {
+        height: 50,
+        backgroundColor: '#00AB66',
+        borderRadius: 25
+    },
+    signinTitle: {
+        fontWeight: 'bold'
+    },
+    signupButton: {
+        height: 50,
+        marginVertical: 10,
+        borderRadius: 25,
+        borderColor: '#00AB66',
+        borderWidth: 1
+    },
+    signupTitle: {
+        fontWeight: 'bold',
+        color: '#00AB66'
+    }
 });
 
 export default LoginHomeScreen;
