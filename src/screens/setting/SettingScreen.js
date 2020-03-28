@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, ScrollView, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Context as AuthContext } from '../../contexts/AuthContext';
 
 import Header from '../../components/Header';
+import Loader from '../../components/Loader';
 
 const TextForm = ({ title, content }) => {
     return (
@@ -67,52 +68,65 @@ const button = StyleSheet.create({
 });
 
 const SettingScreen = ({ navigation }) => {
-    const { state, signout } = useContext(AuthContext);
+    const { state, refresh, signout } = useContext(AuthContext);
     
     return (
         <Header
             title='Setting'
             disableActivation={true}
         >
-            <View style={styles.topContainer}>
-                <TextForm 
-                    title='Username'
-                    content={state.account.username}
-                />
-                <TextForm 
-                    title='Name'
-                    content={state.account.firstName + ' ' + state.account.lastName}
-                />
-                <TextForm 
-                    title='Email'
-                    content={state.account.email}
-                />
-                <TextForm 
-                    title='Gender'
-                    content={state.account.gender}
-                />
-                <TextForm 
-                    title='Tier'
-                    content={state.account.tier}
-                />
-            </View>
-            <View style={styles.bottomContainer}>
-                <ButtonForm 
-                    title='Edit Your Profile'
-                    icon={<Icon name='user' size={22} />}
-                    onSubmit={() => navigation.navigate('EditProfile')}
-                />
-                <ButtonForm 
-                    title='Change Password'
-                    icon={<Icon name='key' size={22} />}
-                    onSubmit={() => navigation.navigate('EditPassword')}
-                />
-                <ButtonForm
-                    title='Logout'
-                    icon={<Icon name='power-off' size={22} />}
-                    onSubmit={signout}
-                />
-            </View>
+            <Loader
+                title={state.loading}
+                loading={state.loading ? true : false}
+            />
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        onRefresh={() => refresh()}
+                        refreshing={state.loading}
+                    />
+                }
+            >
+                <View style={styles.topContainer}>
+                    <TextForm 
+                        title='Username'
+                        content={state.account.username}
+                    />
+                    <TextForm
+                        title='Name'
+                        content={state.account.firstName + ' ' + state.account.lastName}
+                    />
+                    <TextForm 
+                        title='Email'
+                        content={state.account.email}
+                    />
+                    <TextForm 
+                        title='Gender'
+                        content={state.account.gender}
+                    />
+                    <TextForm 
+                        title='Tier'
+                        content={state.account.tier}
+                    />
+                </View>
+                <View style={styles.bottomContainer}>
+                    <ButtonForm 
+                        title='Edit Your Profile'
+                        icon={<Icon name='user' size={22} />}
+                        onSubmit={() => navigation.navigate('EditProfile')}
+                    />
+                    <ButtonForm 
+                        title='Change Password'
+                        icon={<Icon name='key' size={22} />}
+                        onSubmit={() => navigation.navigate('EditPassword')}
+                    />
+                    <ButtonForm
+                        title='Logout'
+                        icon={<Icon name='power-off' size={22} />}
+                        onSubmit={signout}
+                    />
+                </View>
+            </ScrollView>
         </Header>
     );
 };
