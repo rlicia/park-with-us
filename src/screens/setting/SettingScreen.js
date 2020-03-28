@@ -76,6 +76,7 @@ const SettingScreen = ({ navigation }) => {
             disableActivation={true}
             headerRight={
                 <TouchableOpacity
+                    style={{ flex: 1, alignItems: 'center' }}
                     onPress={refresh}
                 >
                     <Icon name='refresh' size={26} />
