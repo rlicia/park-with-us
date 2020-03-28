@@ -30,10 +30,6 @@ const EditPasswordScreen = () => {
                 <NavigationEvents
                     onWillBlur={clearErrorMessage}
                 />
-                <Loader
-                    title={state.loading}
-                    loading={state.loading ? true : false}
-                />
                 <InputForm
                     label={<Text style={styles.inputLabel}>Current Password*</Text>}
                     placeholder='Current Password*'
