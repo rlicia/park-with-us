@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, AppState, Modal, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { withNavigation, NavigationEvents } from '@react-navigation/compat';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import NetInfo from "@react-native-community/netinfo";
+const { height } = Dimensions.get('window');
 
 import { Context as AuthContext } from '../contexts/AuthContext';
 import { Context as TransactionContext } from '../contexts/TransactionContext';
@@ -35,9 +37,73 @@ const Content = ({ loading, content1, content2 }) => {
 const Header = ({ navigation, title, backButton, headerRight, children, disableActivation, userScreen, loginScreen, transactionScreen }) => {
     const { state, initialRefreshing } = useContext(AuthContext);
     const { initialRefreshTransaction } = useContext(TransactionContext);
+    const [networkError, setNetworkError] = useState(false);
+
+    const unsubscribe = NetInfo.addEventListener(state => {
+        console.log("Is Internet Reachable?", state.isInternetReachable);
+        console.log("Is connected?", state.isConnected);
+        if (!state.isInternetReachable && !state.isConnected && networkError === false) {
+            setNetworkError(true);
+        } else if (state.isInternetReachable && state.isConnected && networkError === true) {
+            setNetworkError(false);
+        }
+    });
+    unsubscribe();
+
+    useEffect(() => {
+        AppState.addEventListener("change", _handleAppStateChange);
+
+        return () => {
+            AppState.removeEventListener("change", _handleAppStateChange);
+        };
+    }, []);
+
+    const _handleAppStateChange = (nextAppState, networkError) => {
+        if (nextAppState === 'active') {
+            NetInfo.fetch().then(state => {
+                console.log("Is Internet Reachable?", state.isInternetReachable);
+                console.log("Is connected?", state.isConnected);
+                if (!state.isInternetReachable && !state.isConnected && networkError === false) {
+                    setNetworkError(true);
+                } else if (state.isInternetReachable && state.isConnected && networkError === true) {
+                    setNetworkError(false);
+                }
+            });
+            console.log("App is in Active Foreground Mode.")
+        }
+    };
 
     return (
         <>
+            <Modal
+                transparent={true}
+                animationType='fade'
+                visible={networkError}
+            >
+                <View style={modal.container}>
+                    <View style={modal.header}>
+                        <Text style={modal.headerText}>No Internet Connection</Text>
+                    </View>
+                    <View style={modal.retryContainer}>
+                        <TouchableOpacity
+                            style={modal.retry}
+                            onPress={() => {
+                                NetInfo.fetch().then(state => {
+                                    console.log("Is Internet Reachable?", state.isInternetReachable);
+                                    console.log("Is connected?", state.isConnected);
+                                    if (!state.isInternetReachable || !state.isConnected) {
+                                        setNetworkError(true);
+                                    } else if (state.isInternetReachable && state.isConnected) {
+                                        setNetworkError(false);
+                                    }
+                                });
+                            }}
+                        >
+                            <Text style={modal.retryText}>Retry</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
             <NavigationEvents
                 onWillFocus={() => {
                     if (!loginScreen) {
@@ -89,6 +155,44 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
         </>
     );
 };
+
+const modal = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#00000050'
+    },
+    header: {
+        height: Platform.OS === 'ios' ? 100 : 50,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: Platform.OS === 'ios' ? 'flex-end' : 'center',
+        paddingBottom: Platform.OS === 'ios' ? 15 : 0
+    },
+    headerText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFFFFF'
+    },
+    retryContainer: {
+        flex: 1,
+        alignItems: 'center'
+    },
+    retry: {
+        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: height*0.4,
+        width: 100,
+        height: 40,
+        borderRadius: 5,
+        backgroundColor: 'gray',
+        borderColor: '#00000060'
+    },
+    retryText: {
+        fontSize: 18,
+        fontWeight: 'bold'
+    }
+});
 
 const styles = StyleSheet.create({
     safeAreaContainer: {
