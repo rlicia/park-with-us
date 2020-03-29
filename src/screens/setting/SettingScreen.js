@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, ScrollView, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Context as AuthContext } from '../../contexts/AuthContext';
 
 import Header from '../../components/Header';
-import Loader from '../../components/Loader';
 
 const TextForm = ({ title, content }) => {
     return (
@@ -68,26 +67,18 @@ const button = StyleSheet.create({
 });
 
 const SettingScreen = ({ navigation }) => {
-    const { state, refresh, signout } = useContext(AuthContext);
+    const { state, refreshing, signout } = useContext(AuthContext);
     
     return (
         <Header
             title='Setting'
             disableActivation={true}
-            headerRight={
-                <TouchableOpacity
-                    style={{ flex: 1, alignItems: 'center' }}
-                    onPress={refresh}
-                >
-                    <Icon name='refresh' size={26} />
-                </TouchableOpacity>
-            }
         >
-            <Loader
-                title={state.loading}
-                loading={state.loading ? true : false}
-            />
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => refreshing()} />
+                }
+            >
                 <View style={styles.topContainer}>
                     <TextForm 
                         title='Username'
