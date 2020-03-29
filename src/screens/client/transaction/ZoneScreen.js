@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { NavigationEvents } from '@react-navigation/compat';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -9,29 +9,18 @@ import { Context as AuthContext } from '../../../contexts/AuthContext';
 import Header from '../../../components/Header';
 import Loader from '../../../components/Loader';
 
-const ZoneScreen = () => {
-    const { state: authState, navigateTo } = useContext(AuthContext);
-    const { state: transactionState, fetchZones, clearZoneList } = useContext(TransactionContext);
+const ZoneScreen = ({ navigation }) => {
+    const { state: authState, refreshing } = useContext(AuthContext);
+    const { state: transactionState, fetchZones, clearZoneList, initialLoadTransaction } = useContext(TransactionContext);
 
     return (
         <Header
             title='Select Zone'
             backButton='License'
-            headerRight={
-                <TouchableOpacity
-                    onPress={fetchZones}
-                >
-                    <Icon name='refresh' size={24} />
-                </TouchableOpacity>
-            }
         >
             <NavigationEvents
                 onWillFocus={() => fetchZones()}
                 onWillBlur={clearZoneList}
-            />
-            <Loader
-                title={transactionState.loading}
-                loading={transactionState.loading ? true : false}
             />
             <View style={styles.topContainer}>
                 <View style={styles.licenseContainer}>
@@ -44,6 +33,15 @@ const ZoneScreen = () => {
                 </View>
             </View>
             <FlatList
+                refreshControl={
+                    <RefreshControl
+                        refreshing={transactionState.loading ? true : false}
+                        onRefresh={() => {
+                            refreshing();
+                            initialLoadTransaction();
+                            fetchZones();
+                    }} />
+                }
                 data={transactionState.zoneList}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => {
@@ -51,7 +49,7 @@ const ZoneScreen = () => {
                         <TouchableHighlight
                             style={styles.listItemContainer}
                             underlayColor='#00000030'
-                            onPress={() => navigateTo('Slot', { zone: item })}
+                            onPress={() => navigation.navigate('Slot', { zone: item })}
                         >
                             <View style={styles.listItem}>
                                 <View style={styles.listTitleContainer}>
