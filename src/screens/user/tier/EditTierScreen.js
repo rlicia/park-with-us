@@ -21,7 +21,9 @@ const EditTierScreen = ({ route }) => {
     const [orderTierLevel, setOrderTierLevel] = useState('');
     let pickerData = [];
     for (i=0; i<state.tier.length-1; i++) { // minus -1 = not show not assigned tier
-        pickerData.push({ label: state.tier[i].tierName, value: state.tier[i].tierLevel });
+        if (state.tier[i]._id !== tier._id) {
+            pickerData.push({ label: state.tier[i].tierName, value: state.tier[i].tierLevel });
+        }
     }
     
     return (
