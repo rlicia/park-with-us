@@ -33,22 +33,21 @@ const EditAccountTierScreen = ({ route }) => {
             userScreen={true}
             backButton='AccountDetail'
         >
+            <NavigationEvents
+                onWillFocus={() => fetchTiers({ status })}
+                onWillBlur={() => {
+                    clearErrorMessage();
+                    clearTierData();
+                }}
+            />
+            <Loader
+                loading={state.loading ? true : false}
+            />
             <KeyboardAwareScrollView
                 style={styles.container}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps='always'
             >
-                <NavigationEvents
-                    onWillFocus={() => fetchTiers({ status })}
-                    onWillBlur={() => {
-                        clearErrorMessage();
-                        clearTierData();
-                    }}
-                />
-                <Loader
-                    title={state.loading}
-                    loading={state.loading ? true : false}
-                />
                 <InputForm
                     label={<Text>Current Tier</Text>}
                     value={tier}
