@@ -42,6 +42,7 @@ const AccountListScreen = ({ route }) => {
                     <Text style={styles.accountCountText}>Total: {state.account ? state.account.length !== 0 ? state.account.length : 0 : null}</Text>
                 </View>
                 <FlatList
+                    style={{ flex: 1 }}
                     refreshControl={
                         <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => fetchAccounts({ username, status })} />
                     }
@@ -77,6 +78,9 @@ const AccountListScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     inputContainer: {
         marginHorizontal: 10
     },
