@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
-import { Context as AccountContext } from '../../../contexts/AccountContext';
 
 import Header from '../../../components/Header';
 
@@ -41,7 +40,6 @@ const button = StyleSheet.create({
 
 const AccountHomeScreen = () => {
     const { navigateTo } = useContext(AuthContext);
-    const { clearAccountData } = useContext(AccountContext);
 
     return (
         <Header
