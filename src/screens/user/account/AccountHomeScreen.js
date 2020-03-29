@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
-import { NavigationEvents } from '@react-navigation/compat';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as AccountContext } from '../../../contexts/AccountContext';
@@ -50,9 +49,6 @@ const AccountHomeScreen = () => {
             userScreen={true}
             backButton='UserHome'
         >
-            <NavigationEvents
-                onWillFocus={clearAccountData}
-            />
             <ButtonForm 
                 title='Client'
                 onSubmit={() => navigateTo('AccountList', { status: 1 })}
