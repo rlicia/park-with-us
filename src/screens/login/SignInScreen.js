@@ -20,6 +20,7 @@ const SignInScreen = () => {
             title="Sign In"
             backButton="LoginHome"
             disableActivation={true}
+            loginScreen={true}
         >
             <NavigationEvents
                 onWillBlur={clearErrorMessage}

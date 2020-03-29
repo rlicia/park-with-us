@@ -37,6 +37,7 @@ const SignUpScreen = () => {
             title='Create New Account'
             backButton='LoginHome'
             disableActivation={true}
+            loginScreen={true}
         >
             <NavigationEvents
                 onWillBlur={clearErrorMessage}
