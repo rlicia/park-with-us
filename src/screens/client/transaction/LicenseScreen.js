@@ -51,6 +51,7 @@ const LicenseScreen = () => {
     return (
         <Header
             title='License'
+            transactionScreen={true}
         >
             <NavigationEvents
                 onWillBlur={() => {

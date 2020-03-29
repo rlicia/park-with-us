@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { NavigationEvents } from '@react-navigation/compat';
 
-import { Context as TransactionContext } from '../../../contexts/TransactionContext';
 import { Context as AuthContext } from '../../../contexts/AuthContext';
+import { Context as TransactionContext } from '../../../contexts/TransactionContext';
 
 import Header from '../../../components/Header';
 
@@ -15,6 +15,7 @@ const ZoneScreen = ({ navigation }) => {
         <Header
             title='Select Zone'
             backButton='License'
+            transactionScreen={true}
         >
             <NavigationEvents
                 onWillFocus={() => fetchZones()}

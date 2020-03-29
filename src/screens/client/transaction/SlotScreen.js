@@ -21,6 +21,7 @@ const SlotScreen = ({ route }) => {
         <Header
             title='Select Slot'
             backButton='Zone'
+            transactionScreen={true}
         >
             <NavigationEvents
                 onWillFocus={() => fetchSlots({ zone: zone._id })}

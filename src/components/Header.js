@@ -32,7 +32,7 @@ const Content = ({ loading, content1, content2 }) => {
     );
 };
 
-const Header = ({ navigation, title, backButton, headerRight, children, disableActivation, userScreen, loginScreen }) => {
+const Header = ({ navigation, title, backButton, headerRight, children, disableActivation, userScreen, loginScreen, transactionScreen }) => {
     const { state, initialRefreshing } = useContext(AuthContext);
     const { initialRefreshTransaction } = useContext(TransactionContext);
 
@@ -42,7 +42,7 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
                 onWillFocus={() => {
                     if (!loginScreen) {
                         initialRefreshing();
-                        if (!userScreen) {
+                        if (transactionScreen) {
                             initialRefreshTransaction();
                         }
                     }
