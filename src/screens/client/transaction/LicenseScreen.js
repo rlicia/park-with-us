@@ -53,7 +53,6 @@ const LicenseScreen = () => {
             title='License'
         >
             <NavigationEvents
-                onWillFocus={() => initialLoadTransaction()}
                 onWillBlur={() => {
                     setLicenseTitle('');
                     setLicenseNumber('');
