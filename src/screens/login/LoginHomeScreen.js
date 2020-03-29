@@ -22,7 +22,7 @@ const LoginHomeScreen = ({ navigation }) => {
             />
             <View style={styles.topContainer}>
                 <Text style={styles.title}>
-                    Park With Us
+                    ParkWithUs
                 </Text>
             </View>
             <View style={styles.bottomContainer}>
