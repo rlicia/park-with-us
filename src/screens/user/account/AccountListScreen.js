@@ -2,14 +2,12 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, Keyboard, RefreshControl } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
-import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as AccountContext } from '../../../contexts/AccountContext';
 
 import Header from '../../../components/Header';
 
-const AccountListScreen = ({ route }) => {
-    const { navigateTo } = useContext(AuthContext);
-    const { state, fetchAccounts, clearAccountData } = useContext(AccountContext);
+const AccountListScreen = ({ navigation, route }) => {
+    const { state, fetchAccounts } = useContext(AccountContext);
     const [username, setUsername] = useState('');
     const status = route.params.status
     
@@ -53,7 +51,7 @@ const AccountListScreen = ({ route }) => {
                                     underlayColor='#00000030'
                                     onPress={() => {
                                         Keyboard.dismiss();
-                                        navigateTo('AccountDetail', { item });
+                                        navigation.navigate('AccountDetail', { item });
                                     }}
                                 >
                                     <View style={styles.listItem}>

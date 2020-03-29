@@ -47,7 +47,7 @@ const button = StyleSheet.create({
 });
 
 const UserHomeScreen = ({ navigation }) => {
-    const { state, navigateTo, refreshing } = useContext(AuthContext);
+    const { state, refreshing } = useContext(AuthContext);
     
     return (
         <Header
@@ -62,22 +62,22 @@ const UserHomeScreen = ({ navigation }) => {
                 <ButtonForm 
                     title='Parking Space'
                     icon={<Icon name='car' size={22} />}
-                    onSubmit={() => navigateTo('EditSlot')}
+                    onSubmit={() => navigation.navigate('EditSlot')}
                 />
-                <ButtonForm 
+                <ButtonForm
                     title='Client & User'
                     icon={<Icon name='users' size={22} />}
-                    onSubmit={() => navigateTo('AccountHome')}
+                    onSubmit={() => navigation.navigate('AccountHome')}
                 />
                 <ButtonForm
                     title='Tier'
                     icon={<Icon name='pencil' size={22} />}
-                    onSubmit={() => navigateTo('TierHome')}
+                    onSubmit={() => navigation.navigate('TierHome')}
                 />
                 <ButtonForm 
                     title='Create User Account'
                     icon={<Icon name='user-plus' size={22} />}
-                    onSubmit={() => navigateTo('CreateUser')}
+                    onSubmit={() => navigation.navigate('CreateUser')}
                 />
             </ScrollView>
         </Header>

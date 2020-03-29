@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableHighlight, ScrollView, RefreshControl 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationEvents } from '@react-navigation/compat';
 
-import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as AccountContext } from '../../../contexts/AccountContext';
 
 import Header from '../../../components/Header';
@@ -110,8 +109,7 @@ const button = StyleSheet.create({
     },
 });
 
-const AccountDetailScreen = ({ route }) => {
-    const { navigateTo } = useContext(AuthContext);
+const AccountDetailScreen = ({ navigation, route }) => {
     const { state, fetchAccountDetail, updateAccountStatus, clearAccountDetailData } = useContext(AccountContext);
     const user = route.params.item;
     const detail = state.accountDetail;
@@ -165,12 +163,12 @@ const AccountDetailScreen = ({ route }) => {
                     <ButtonForm 
                         title='Change Tier'
                         icon={<Icon name='pencil' size={22} />}
-                        onSubmit={() => navigateTo('EditAccountTier', { id: detail._id, tierId: detail.tierId, tier: detail.tier, status: user.status })}
+                        onSubmit={() => navigation.navigate('EditAccountTier', { id: detail._id, tierId: detail.tierId, tier: detail.tier, status: user.status })}
                     />
                     {user.status === 1 ? <ButtonForm
                         title='Change RFID Tag'
                         icon={<Icon name='tag' size={22} />}
-                        onSubmit={() => navigateTo('EditAccountRfid', { id: detail._id, rfidTag: detail.rfidTag })}
+                        onSubmit={() => navigation.navigate('EditAccountRfid', { id: detail._id, rfidTag: detail.rfidTag })}
                     /> : null}
                     <ActivateForm
                         activate={detail.accountStatus}

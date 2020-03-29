@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { Context as AuthContext } from '../../../contexts/AuthContext';
-
 import Header from '../../../components/Header';
 
 const TextForm = ({ title, content }) => {
@@ -29,8 +27,7 @@ const text = StyleSheet.create({
     }
 });
 
-const UserCreatedScreen = ({ route }) => {
-    const { navigateTo } = useContext(AuthContext);
+const UserCreatedScreen = ({ navigation, route }) => {
     const user = route.params.user;
     const firstName = user.firstName.charAt(0).toUpperCase() + user.firstName.substring(1);
     const lastName = user.lastName.charAt(0).toUpperCase() + user.lastName.substring(1);
@@ -71,7 +68,7 @@ const UserCreatedScreen = ({ route }) => {
                         buttonStyle={styles.button}
                         containerStyle={styles.buttonContainer}
                         title='Go Back'
-                        onPress={() => navigateTo('UserHome')}
+                        onPress={() => navigation.navigate('UserHome')}
                     />
                 </View>
             </ScrollView>

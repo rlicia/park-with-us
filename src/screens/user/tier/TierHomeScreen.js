@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableHighlight } from 'react-native';
 
-import { Context as AuthContext } from '../../../contexts/AuthContext';
-
 import Header from '../../../components/Header';
 
 const ButtonForm = ({ title, onSubmit }) => {
@@ -38,9 +36,7 @@ const button = StyleSheet.create({
     }
 });
 
-const TierHomeScreen = () => {
-    const { navigateTo } = useContext(AuthContext);
-
+const TierHomeScreen = ({ navigation }) => {
     return (
         <Header
             title='Tier'
@@ -50,11 +46,11 @@ const TierHomeScreen = () => {
             <ScrollView>
                 <ButtonForm 
                     title='Client'
-                    onSubmit={() => navigateTo('TierList', { status: 1 })}
+                    onSubmit={() => navigation.navigate('TierList', { status: 1 })}
                 />
                 <ButtonForm
                     title='User'
-                    onSubmit={() => navigateTo('TierList', { status: 0 })}
+                    onSubmit={() => navigation.navigate('TierList', { status: 0 })}
                 />
             </ScrollView>
         </Header>

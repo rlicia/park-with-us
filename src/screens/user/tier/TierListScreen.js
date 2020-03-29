@@ -3,14 +3,12 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } fr
 import { NavigationEvents } from '@react-navigation/compat';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as TierContext } from '../../../contexts/TierContext';
 
 import Header from '../../../components/Header';
 import Loader from '../../../components/Loader';
 
-const TierListScreen = ({ route }) => {
-    const { navigateTo } = useContext(AuthContext);
+const TierListScreen = ({ navigation, route }) => {
     const { state, fetchTiers, clearTierData } = useContext(TierContext);
     const status = route.params.status;
 
@@ -23,7 +21,7 @@ const TierListScreen = ({ route }) => {
                 <TouchableOpacity 
                     style={{ flex: 1, alignItems: 'center' }}
                     onPress={() => {
-                        navigateTo('CreateTier', { status });
+                        navigation.navigate('CreateTier', { status });
                     }}
                 >
                     <Icon name='plus' size={26} />
@@ -58,7 +56,7 @@ const TierListScreen = ({ route }) => {
                                 {item.tierLevel !== 0 ?
                                     <TouchableOpacity
                                         style={styles.listIcon}
-                                        onPress={() => navigateTo('EditTier', { item, status })}
+                                        onPress={() => navigation.navigate('EditTier', { item, status })}
                                     >
                                         <Icon name='pencil' size={20} />
                                     </TouchableOpacity>

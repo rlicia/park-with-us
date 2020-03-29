@@ -2,12 +2,11 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight, ScrollView } from 'react-native';
 import { NavigationEvents } from '@react-navigation/compat';
 
-import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as AccountContext } from '../../../contexts/AccountContext';
 
 import Header from '../../../components/Header';
 
-const ButtonForm = ({ title, icon, onSubmit }) => {
+const ButtonForm = ({ title, onSubmit }) => {
     return (
         <TouchableHighlight
             style={button.container}
@@ -40,8 +39,7 @@ const button = StyleSheet.create({
     }
 });
 
-const AccountHomeScreen = () => {
-    const { navigateTo } = useContext(AuthContext);
+const AccountHomeScreen = ({ navigation }) => {
     const { clearAccountData } = useContext(AccountContext);
 
     return (
@@ -56,11 +54,11 @@ const AccountHomeScreen = () => {
             <ScrollView>
                 <ButtonForm 
                     title='Client'
-                    onSubmit={() => navigateTo('AccountList', { status: 1 })}
+                    onSubmit={() => navigation.navigate('AccountList', { status: 1 })}
                 />
                 <ButtonForm 
                     title='User'
-                    onSubmit={() => navigateTo('AccountList', { status: 0 })}
+                    onSubmit={() => navigation.navigate('AccountList', { status: 0 })}
                 />
             </ScrollView>
         </Header>

@@ -2,13 +2,12 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as ParkingContext } from '../../../contexts/ParkingContext';
  
 import Header from '../../../components/Header';
+import { NavigationEvents } from '@react-navigation/compat';
 
-const SlotUpdatedScreen = () => {
-    const { navigateTo } = useContext(AuthContext);
+const SlotUpdatedScreen = ({ navigation }) => {
     const { state } = useContext(ParkingContext);
 
     return (
@@ -82,7 +81,7 @@ const SlotUpdatedScreen = () => {
                     buttonStyle={styles.button}
                     containerStyle={styles.buttonContainer}
                     title='Go Back'
-                    onPress={() => navigateTo('UserHome')}
+                    onPress={() => navigation.navigate('UserHome')}
                 />
             </View>
         </Header>
