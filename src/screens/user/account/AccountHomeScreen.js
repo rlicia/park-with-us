@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, ScrollView } from 'react-native';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
 
@@ -47,14 +47,16 @@ const AccountHomeScreen = () => {
             userScreen={true}
             backButton='UserHome'
         >
-            <ButtonForm 
-                title='Client'
-                onSubmit={() => navigateTo('AccountList', { status: 1 })}
-            />
-            <ButtonForm 
-                title='User'
-                onSubmit={() => navigateTo('AccountList', { status: 0 })}
-            />
+            <ScrollView>
+                <ButtonForm 
+                    title='Client'
+                    onSubmit={() => navigateTo('AccountList', { status: 1 })}
+                />
+                <ButtonForm 
+                    title='User'
+                    onSubmit={() => navigateTo('AccountList', { status: 0 })}
+                />
+            </ScrollView>
         </Header>
     );
 };
