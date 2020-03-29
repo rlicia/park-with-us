@@ -12,8 +12,8 @@ const getDistance = (longitude, latitude, location) => {
     var lat1 = latitude;
     
     //our location
-    var lon2 = -122//location[0];
-    var lat2 = 37.3//location[1];
+    var lon2 = -122.1//location[0];
+    var lat2 = 37.422//location[1];
     
     var R = 6371; // km
     
@@ -232,6 +232,17 @@ const initialLoadTransaction = dispatch => async () => {
     }
 };
 
+const initialRefreshTransaction = dispatch => async () => {
+    try {
+        const response = await router.get('/transaction/load');
+        if (response.data) {
+            navigate('Transaction');
+        }
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
 const cancelBooking = dispatch => async () => {
     try {
         dispatch({ type: 'loading', payload: 'Loading...' });
@@ -281,6 +292,7 @@ export const { Context, Provider } = createDataContext(
         saveTransaction,
         loadTransaction,
         initialLoadTransaction,
+        initialRefreshTransaction,
         cancelBooking,
         clearErrorMessage,
         clearZoneList,
