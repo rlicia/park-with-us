@@ -18,7 +18,6 @@ const LoginHomeScreen = ({ navigation }) => {
     return (
         <>
             <Loader
-                title={state.loading}
                 loading={state.loading ? true : false}
             />
             <View style={styles.topContainer}>
