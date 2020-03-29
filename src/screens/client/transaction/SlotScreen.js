@@ -86,7 +86,7 @@ const SlotScreen = ({ route }) => {
                                 }
                                 
                                 if (transactionState.range) {
-                                    Alert.alert(`About ${Math.ceil(state.range)} km more`, 'Please be within 5 km before booking', [{ text: 'OK', onPress: () => clearRange() }])
+                                    Alert.alert(`About ${Math.ceil(state.range)} km more`, 'Please be within 5 km before booking', [{ text: 'OK', onPress: () => clearRange() }]);
                                 }
                             }},
                             { text: 'Cancel' }
