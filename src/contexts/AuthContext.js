@@ -182,6 +182,15 @@ const refreshing = dispatch => async () => {
     }
 };
 
+const initialRefreshing = dispatch => async () => {
+    try {
+        const response = await router.get('/account');
+        dispatch({ type: 'fetch_account', payload: response.data.account });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
 export const { Context, Provider } = createDataContext(
     authReducer,
     {
@@ -192,7 +201,8 @@ export const { Context, Provider } = createDataContext(
        editAccount,
        changePassword,
        clearErrorMessage,
-       refreshing
+       refreshing,
+       initialRefreshing
     },
     { token: null, account: {}, errorMessage: '', loading: '' }
 );
