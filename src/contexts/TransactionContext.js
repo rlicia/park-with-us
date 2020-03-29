@@ -12,8 +12,8 @@ const getDistance = (longitude, latitude, location) => {
     var lat1 = latitude;
     
     //our location
-    var lon2 = location[0];
-    var lat2 = location[1];
+    var lon2 = -122//location[0];
+    var lat2 = 37.3//location[1];
     
     var R = 6371; // km
     
@@ -145,7 +145,6 @@ const setLicense = dispatch => async ({ licenseTitle, licenseNumber, latitude, l
     try {
         const loc = await router.get('/location');
         const location = loc.data;
-        console.log(loc.data);
         const range = getDistance(longitude, latitude, location);
         if (range) {
             return dispatch({ type: 'add_range', payload: range });
