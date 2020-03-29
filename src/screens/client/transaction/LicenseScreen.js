@@ -53,6 +53,7 @@ const LicenseScreen = () => {
             title='License'
         >
             <NavigationEvents
+                onWillFocus={clearErrorMessage}
                 onWillBlur={() => {
                     setLicenseTitle('');
                     setLicenseNumber('');
