@@ -6,7 +6,6 @@ import { Context as TransactionContext } from '../../../contexts/TransactionCont
 import { Context as AuthContext } from '../../../contexts/AuthContext';
 
 import Header from '../../../components/Header';
-import Loader from '../../../components/Loader';
 
 const ZoneScreen = ({ navigation }) => {
     const { state: authState, refreshing } = useContext(AuthContext);
