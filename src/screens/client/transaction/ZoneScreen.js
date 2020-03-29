@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableHighlight, RefreshControl } from 'react-native';
 import { NavigationEvents } from '@react-navigation/compat';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
