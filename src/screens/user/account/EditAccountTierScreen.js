@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Keyboard } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationEvents } from '@react-navigation/compat';
 import RNPickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
