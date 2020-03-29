@@ -31,6 +31,7 @@ const EditTierScreen = ({ route }) => {
             backButton='TierList'
             headerRight={
                 <TouchableOpacity
+                    style={{ flex: 1, alignItems: 'center' }}
                     onPress={() => deleteTier({ status, id: tier._id })}
                 >
                     <Icon name='trash' size={22} />
