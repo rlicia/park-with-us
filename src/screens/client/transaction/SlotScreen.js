@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Keyboard, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native';
 import { NavigationEvents } from '@react-navigation/compat';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Geolocation from 'react-native-geolocation-service';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
