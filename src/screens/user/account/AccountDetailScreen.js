@@ -48,7 +48,7 @@ const ButtonForm = ({ title, icon, onSubmit }) => {
 const ActivateForm = ({ activate, onSubmit }) => {
     return (
         <TouchableHighlight
-            style={(activate || activate === 0) ? button.container : null}
+            style={(activate || activate === 0) ? button.container : { height: 0 }}
             underlayColor='#00000030'
             onPress={onSubmit}
         >
@@ -167,7 +167,7 @@ const AccountDetailScreen = ({ route }) => {
                         icon={<Icon name='pencil' size={22} />}
                         onSubmit={() => navigateTo('EditAccountTier', { id: detail._id, tierId: detail.tierId, tier: detail.tier, status: user.status })}
                     />
-                    {user.status === 1 ? <ButtonForm 
+                    {user.status === 1 ? <ButtonForm
                         title='Change RFID Tag'
                         icon={<Icon name='tag' size={22} />}
                         onSubmit={() => navigateTo('EditAccountRfid', { id: detail._id, rfidTag: detail.rfidTag })}
