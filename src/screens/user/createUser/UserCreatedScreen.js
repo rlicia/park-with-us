@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
@@ -43,36 +43,38 @@ const UserCreatedScreen = ({ route }) => {
             title='User Created'
             userScreen={true}
         >
-            <View style={styles.container}>
-                <Text style={styles.title}>Welcome,</Text>
-                <TextForm 
-                    title='Username'
-                    content={user.username}
-                />
-                <TextForm 
-                    title='Name'
-                    content={name}
-                />
-                <TextForm 
-                    title='Email'
-                    content={user.email}
-                />
-                <TextForm 
-                    title='Tier'
-                    content={user.tier}
-                />
-                <TextForm 
-                    title='Gender'
-                    content={gender}
-                />
-                <Button
-                    titleStyle={styles.buttonTitle}
-                    buttonStyle={styles.button}
-                    containerStyle={styles.buttonContainer}
-                    title='Go Back'
-                    onPress={() => navigateTo('UserHome')}
-                />
-            </View>
+            <ScrollView>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Welcome,</Text>
+                    <TextForm
+                        title='Username'
+                        content={user.username}
+                    />
+                    <TextForm
+                        title='Name'
+                        content={name}
+                    />
+                    <TextForm 
+                        title='Email'
+                        content={user.email}
+                    />
+                    <TextForm 
+                        title='Tier'
+                        content={user.tier}
+                    />
+                    <TextForm 
+                        title='Gender'
+                        content={gender}
+                    />
+                    <Button
+                        titleStyle={styles.buttonTitle}
+                        buttonStyle={styles.button}
+                        containerStyle={styles.buttonContainer}
+                        title='Go Back'
+                        onPress={() => navigateTo('UserHome')}
+                    />
+                </View>
+            </ScrollView>
         </Header>
     );
 };
