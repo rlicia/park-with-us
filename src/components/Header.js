@@ -33,17 +33,17 @@ const Content = ({ loading, content1, content2 }) => {
 };
 
 const Header = ({ navigation, title, backButton, headerRight, children, disableActivation, userScreen, loginScreen }) => {
-    const { state, refreshing } = useContext(AuthContext);
-    const { initialLoadTransaction } = useContext(TransactionContext);
+    const { state, initialRefreshing } = useContext(AuthContext);
+    const { initialRefreshTransaction } = useContext(TransactionContext);
 
     return (
         <>
             <NavigationEvents
                 onWillFocus={() => {
                     if (!loginScreen) {
-                        refreshing();
+                        initialRefreshing();
                         if (!userScreen) {
-                            initialLoadTransaction();
+                            initialRefreshTransaction();
                         }
                     }
                 }}
