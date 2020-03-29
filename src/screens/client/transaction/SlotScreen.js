@@ -8,7 +8,6 @@ import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as TransactionContext } from '../../../contexts/TransactionContext';
 
 import Header from '../../../components/Header';
-import Loader from '../../../components/Loader';
 import ParkingMap from '../../../components/ParkingMap';
 
 const SlotScreen = ({ route }) => {
@@ -30,10 +29,6 @@ const SlotScreen = ({ route }) => {
                     clearSelectedSlot();
                     clearSlotList();
                 }}
-            />
-            <Loader
-                title={transactionState.loading}
-                loading={transactionState.loading ? true : false}
             />
             <View style={styles.topContainer}>
                 <View style={styles.licenseContainer}>
