@@ -1,57 +1,92 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { withNavigation } from '@react-navigation/compat';
+import { withNavigation, NavigationEvents } from '@react-navigation/compat';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Context as AuthContext } from '../contexts/AuthContext';
+import { Context as TransactionContext } from '../contexts/TransactionContext';
 
-const Header = ({ navigation, title, backButton, headerRight, children, disableActivation, userScreen }) => {
-    const { state: { account } } = useContext(AuthContext);
+const Content = ({ loading, content1, content2 }) => {
+    const { refreshing } = useContext(AuthContext);
 
     return (
-        <SafeAreaView style={styles.safeAreaContainer}>
-            <View style={styles.headerContainer}>
-                <View style={styles.headerLeft}>
-                    {backButton ?
-                        <TouchableOpacity
-                            style={styles.backButton}
-                            onPress={() => navigation.goBack()}
-                        >
-                            <Icon name='chevron-left' size={26} />
-                        </TouchableOpacity>
-                    : null}
-                </View>
-                <View style={styles.headerCenter}>
-                    <Text style={styles.headerTitle}>
-                        {title}
-                    </Text>
-                </View>
-                <View style={styles.headerRight}>
-                    {headerRight}
-                </View>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    refreshing={loading}
+                    onRefresh={() => {
+                        refreshing();
+                }} />
+            }
+        >
+            <View style={styles.textContainer}>
+                <Text style={styles.text}>
+                    {content1}
+                </Text>
+                <Text style={styles.text}>
+                    {content2}
+                </Text>
             </View>
-            <View style={styles.mainContainer}>
-                {
-                    disableActivation ? children
-                    : account.accountStatus === 1 ? userScreen ?
-                    account.status === 0 ? children
-                    : <View style={styles.textContainer}>
-                        <Text style={styles.text}>
-                            This screen is for ADMIN only.
-                        </Text>
-                    </View> : children
-                    : <View style={styles.textContainer}>
-                        <Text style={styles.text}>
-                            Your account is deactivated.
-                        </Text>
-                        <Text style={styles.text}>
-                            Please contact administrator.
+        </ScrollView>
+    );
+};
+
+const Header = ({ navigation, title, backButton, headerRight, children, disableActivation, userScreen, loginScreen }) => {
+    const { state, refreshing } = useContext(AuthContext);
+    const { initialLoadTransaction } = useContext(TransactionContext);
+
+    return (
+        <>
+            <NavigationEvents
+                onWillFocus={() => {
+                    if (!loginScreen) {
+                        refreshing();
+                        if (!userScreen) {
+                            initialLoadTransaction();
+                        }
+                    }
+                }}
+            />
+            <SafeAreaView style={styles.safeAreaContainer}>
+                <View style={styles.headerContainer}>
+                    <View style={styles.headerLeft}>
+                        {backButton ?
+                            <TouchableOpacity
+                                style={styles.backButton}
+                                onPress={() => navigation.goBack()}
+                            >
+                                <Icon name='chevron-left' size={26} />
+                            </TouchableOpacity>
+                        : null}
+                    </View>
+                    <View style={styles.headerCenter}>
+                        <Text style={styles.headerTitle}>
+                            {title}
                         </Text>
                     </View>
-                }
-            </View>
-        </SafeAreaView>
+                    <View style={styles.headerRight}>
+                        {headerRight}
+                    </View>
+                </View>
+                <View style={styles.mainContainer}>
+                    {
+                        disableActivation ? children
+                        : state.account.accountStatus === 1 ? userScreen ?
+                        state.account.status === 0 ? children
+                        : <Content
+                            loading={state.loading ? true : false}
+                            content1='This screen is for ADMIN only.'
+                        /> : children
+                        : <Content
+                            loading={state.loading ? true : false}
+                            content1='Your account is deactivated.'
+                            content2='Please contact administrator.'
+                        />
+                    }
+                </View>
+            </SafeAreaView>
+        </>
     );
 };
 
