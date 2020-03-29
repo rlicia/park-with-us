@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, Keyboard, RefreshControl } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import { NavigationEvents } from '@react-navigation/compat';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as AccountContext } from '../../../contexts/AccountContext';
@@ -20,9 +19,6 @@ const AccountListScreen = ({ route }) => {
             userScreen={true}
             backButton='AccountHome'
         >
-            <NavigationEvents
-                onWillBlur={clearAccountData}
-            />
             <SearchBar
                 inputStyle={styles.input}
                 inputContainerStyle={styles.inputContainer}

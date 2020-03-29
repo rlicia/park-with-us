@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight, ScrollView } from 'react-native';
+import { NavigationEvents } from '@react-navigation/compat';
 
 import { Context as AuthContext } from '../../../contexts/AuthContext';
+import { Context as AccountContext } from '../../../contexts/AccountContext';
 
 import Header from '../../../components/Header';
 
@@ -40,6 +42,7 @@ const button = StyleSheet.create({
 
 const AccountHomeScreen = () => {
     const { navigateTo } = useContext(AuthContext);
+    const { clearAccountData } = useContext(AccountContext);
 
     return (
         <Header
@@ -47,6 +50,9 @@ const AccountHomeScreen = () => {
             userScreen={true}
             backButton='UserHome'
         >
+            <NavigationEvents
+                onWillFocus={clearAccountData}
+            />
             <ScrollView>
                 <ButtonForm 
                     title='Client'
