@@ -59,7 +59,6 @@ const CreateUserScreen = () => {
                     }}
                 />
                 <Loader
-                    title={state.loading}
                     loading={state.loading ? true : false}
                 />
                 <InputForm

@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, ScrollView, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Context as AuthContext } from '../../contexts/AuthContext';
 
 import Header from '../../components/Header';
-import Loader from '../../components/Loader';
 
 const ButtonForm = ({ title, icon, onSubmit }) => {
     return (
@@ -48,26 +47,18 @@ const button = StyleSheet.create({
 });
 
 const UserHomeScreen = ({ navigation }) => {
-    const { state, navigateTo, refresh } = useContext(AuthContext);
+    const { state, navigateTo, refreshing } = useContext(AuthContext);
     
     return (
         <Header
             title='Home'
             userScreen={true}
-            headerRight={
-                <TouchableOpacity
-                    style={{ flex: 1, alignItems: 'center' }}
-                    onPress={refresh}
-                >
-                    <Icon name='refresh' size={26} />
-                </TouchableOpacity>
-            }
         >
-            <Loader
-                title={state.loading}
-                loading={state.loading ? true : false}
-            />
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => refreshing()} />
+                }
+            >
                 <ButtonForm 
                     title='Parking Space'
                     icon={<Icon name='car' size={22} />}
@@ -76,12 +67,12 @@ const UserHomeScreen = ({ navigation }) => {
                 <ButtonForm 
                     title='Client & User'
                     icon={<Icon name='users' size={22} />}
-                    onSubmit={() => navigation.navigate('AccountHome')}
+                    onSubmit={() => navigateTo('AccountHome')}
                 />
-                <ButtonForm 
+                <ButtonForm
                     title='Tier'
                     icon={<Icon name='pencil' size={22} />}
-                    onSubmit={() => navigation.navigate('TierHome')}
+                    onSubmit={() => navigateTo('TierHome')}
                 />
                 <ButtonForm 
                     title='Create User Account'
