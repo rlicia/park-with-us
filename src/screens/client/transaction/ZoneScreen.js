@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { NavigationEvents } from '@react-navigation/compat';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Context as TransactionContext } from '../../../contexts/TransactionContext';
 import { Context as AuthContext } from '../../../contexts/AuthContext';
