@@ -12,8 +12,8 @@ const getDistance = (longitude, latitude, location) => {
     var lat1 = latitude;
     
     //our location
-    var lon2 = -122.1//location[0];
-    var lat2 = 37.422//location[1];
+    var lon2 = location[0];
+    var lat2 = location[1];
     
     var R = 6371; // km
     
