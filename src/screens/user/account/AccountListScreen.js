@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableHighlight, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableHighlight, Keyboard, RefreshControl } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { NavigationEvents } from '@react-navigation/compat';
 
@@ -27,7 +27,6 @@ const AccountListScreen = ({ route }) => {
                 inputStyle={styles.input}
                 inputContainerStyle={styles.inputContainer}
                 lightTheme={true}
-                showLoading={state.loading ? true : false}
                 autoCapitalize='none'
                 autoCorrect={false}
                 placeholder='Enter Username'
@@ -43,6 +42,9 @@ const AccountListScreen = ({ route }) => {
                     <Text style={styles.accountCountText}>Total: {state.account ? state.account.length !== 0 ? state.account.length : 0 : null}</Text>
                 </View>
                 <FlatList
+                    refreshControl={
+                        <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => fetchAccounts({ username, status })} />
+                    }
                     data={state.account}
                     keyboardShouldPersistTaps='always'
                     keyExtractor={item => item._id}
