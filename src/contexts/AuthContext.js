@@ -183,7 +183,7 @@ const changePassword = dispatch => async ({ password, newPassword, confirmNewPas
 };
 
 //refresh
-const refresh = dispatch => async () => {
+const refreshing = dispatch => async () => {
     try {
         dispatch({ type: 'loading', payload: 'Refreshing...' });
         const response = await router.get('/account');
@@ -204,7 +204,7 @@ export const { Context, Provider } = createDataContext(
        editAccount,
        changePassword,
        clearErrorMessage,
-       refresh
+       refreshing
     },
     { token: null, account: {}, errorMessage: '', loading: '' }
 );
