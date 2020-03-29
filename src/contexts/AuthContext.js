@@ -123,17 +123,6 @@ const signout = dispatch => async () => {
     navigate('LoginHome');
 };
 
-//fetch account
-const navigateTo = dispatch => async (routeName, params) => {
-    try {
-        navigate(routeName, params);
-        const response = await router.get('/account');
-        dispatch({ type: 'fetch_account', payload: response.data.account });
-    } catch (err) {
-        dispatch({ type: 'add_error', payload: err.response.data.error });
-    }
-};
-
 //edit profile
 const editAccount = dispatch => async ({ firstName, lastName, email }) => {
     if (!firstName || !lastName || !email) {
@@ -200,7 +189,6 @@ export const { Context, Provider } = createDataContext(
        signin,
        signout,
        tryLocalSignin,
-       navigateTo,
        editAccount,
        changePassword,
        clearErrorMessage,
