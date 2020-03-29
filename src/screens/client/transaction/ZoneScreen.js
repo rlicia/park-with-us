@@ -37,9 +37,9 @@ const ZoneScreen = ({ navigation }) => {
                     <RefreshControl
                         refreshing={transactionState.loading ? true : false}
                         onRefresh={() => {
+                            fetchZones();
                             refreshing();
                             initialLoadTransaction();
-                            fetchZones();
                     }} />
                 }
                 data={transactionState.zoneList}
