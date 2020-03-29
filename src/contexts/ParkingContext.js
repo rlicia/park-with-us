@@ -83,7 +83,7 @@ const updateSlots = dispatch => async ({ count }) => {
         dispatch({ type: 'loading', payload: 'Saving...' });
         const response = await router.post('/user/updateSlots', { slotUpdated });
         dispatch({ type: 'update_details', payload: response.data.updateDetails });
-        navigate('UpdatedSlot');
+        navigate('SlotUpdated');
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
