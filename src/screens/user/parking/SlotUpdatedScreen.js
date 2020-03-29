@@ -13,7 +13,7 @@ const SlotUpdatedScreen = () => {
 
     return (
         <Header
-            title='Slots Updated'
+            title='Slot Updated'
             userScreen={true}
         >
             <View style={styles.container}>
