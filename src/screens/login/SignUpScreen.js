@@ -38,17 +38,17 @@ const SignUpScreen = () => {
             backButton='LoginHome'
             disableActivation={true}
         >
+            <NavigationEvents
+                onWillBlur={clearErrorMessage}
+            />
+            <Loader
+                loading={state.loading ? true : false}
+            />
             <KeyboardAwareScrollView
                 style={styles.container}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps='always'
             >
-                <NavigationEvents
-                    onWillBlur={clearErrorMessage}
-                />
-                <Loader
-                    loading={state.loading ? true : false}
-                />
                 <InputForm
                     label={<Text style={styles.inputLabel}>Username*</Text>}
                     placeholder='Username*'
