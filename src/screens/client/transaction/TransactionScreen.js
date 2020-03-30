@@ -16,6 +16,7 @@ const TransactionScreen = () => {
     return (
         <Header
             title='Booking Detail'
+            disableActivation={true}
         >
             <Loader
                 title={state.loading}
