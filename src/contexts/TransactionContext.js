@@ -12,8 +12,8 @@ const getDistance = (longitude, latitude, location) => {
     var lat1 = latitude;
     
     //our location
-    var lon2 = location[0];
-    var lat2 = location[1];
+    var lon2 = -122.08//location[0];
+    var lat2 = 37.422//location[1];
     
     var R = 6371; // km
     
@@ -42,18 +42,28 @@ const transactionReducer = (state, action) => {
             return { ...state, license: action.payload, loading: '' };
         case 'fetch_zones':
             return { ...state, zoneList: action.payload, loading: '' };
+        case 'refresh_zones':
+            return { ...state, zoneList: action.payload, refreshing: false };
         case 'fetch_slots':
             return { ...state, slotsName: action.payload.slotsName, slotsStatus: action.payload.slotsStatus, loading: '' };
+        case 'refresh_slots':
+            return { ...state, slotsName: action.payload.slotsName, slotsStatus: action.payload.slotsStatus, refreshing: false };
         case 'fetch_histories':
             return { ...state, histories: action.payload, loading: '' };
+        case 'refresh_histories':
+            return { ...state, histories: action.payload, refreshing: false };
         case 'fetch_historyDetails':
             return { ...state, historyDetails: action.payload, loading: '' };
+        case 'refresh_historyDetails':
+            return { ...state, historyDetails: action.payload, refreshing: false };
         case 'select_slot':
-            return { ...state, selectedSlot: action.payload, loading: '' };
+            return { ...state, selectedSlot: action.payload };
         case 'load_transaction':
             return { ...state, transaction: action.payload, loading: '' };
+        case 'refresh_transaction':
+            return { ...state, transaction: action.payload, refreshing: false };
         case 'add_range':
-            return { ...state, range: action.payload, loading: '' };
+            return { ...state, range: action.payload };
         case 'clear_zones':
             return { ...state, zoneList: [] };
         case 'clear_slots':
@@ -69,11 +79,13 @@ const transactionReducer = (state, action) => {
         case 'clear_range':
             return { ...state, range: null };
         case 'add_error':
-            return { ...state, errorMessage: action.payload, loading: '' };
+            return { ...state, errorMessage: action.payload, loading: '', refreshing: false };
         case 'clear_error_message':
             return { ...state, errorMessage: '' };
         case 'loading':
             return { ...state, loading: action.payload };
+        case 'refresh':
+            return { ...state, refreshing: true };
         default:
             return state;
     }
@@ -162,9 +174,19 @@ const setLicense = dispatch => async ({ licenseTitle, licenseNumber, latitude, l
 //fetch Zones
 const fetchZones = dispatch => async () => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
         const response = await router.get('/transaction/zone');
         dispatch({ type: 'fetch_zones', payload: response.data.tier });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
+//refresh Zones
+const refreshZones = dispatch => async () => {
+    try {
+        dispatch({ type: 'refresh' });
+        const response = await router.get('/transaction/zone');
+        dispatch({ type: 'refresh_zones', payload: response.data.tier });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
@@ -174,11 +196,23 @@ const selectSlot = dispatch => async ({ name }) => {
     dispatch({ type: 'select_slot', payload: name });
 };
 
+
+//fetch slots
 const fetchSlots = dispatch => async ({ zone }) => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
         const response = await router.get(`/transaction/${zone}/slot`);
         dispatch({ type: 'fetch_slots', payload: { slotsName: response.data.name, slotsStatus: response.data.status } }); 
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
+//refresh slots
+const refreshSlots = dispatch => async ({ zone }) => {
+    try {
+        dispatch({ type: 'refresh' });
+        const response = await router.get(`/transaction/${zone}/slot`);
+        dispatch({ type: 'refresh_slots', payload: { slotsName: response.data.name, slotsStatus: response.data.status } }); 
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
@@ -197,7 +231,7 @@ const saveTransaction = dispatch => async ({ slot, license, zone, latitude, long
             return dispatch({ type: 'add_range', payload: range });
         }
 
-        dispatch({ type: 'loading', payload: 'Checking...' });
+        dispatch({ type: 'loading', payload: 'Booking...' });
         await router.post('/transaction/reservation', { slot, license, zone });
         dispatch({ type: 'loading', payload: '' });
         navigate('Transaction');
@@ -219,13 +253,13 @@ const loadTransaction = dispatch => async () => {
     }
 };
 
-const initialLoadTransaction = dispatch => async () => {
+const refreshTransaction = dispatch => async () => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
+        dispatch({ type: 'refresh' });
         const response = await router.get('/transaction/load');
-        dispatch({ type: 'loading', payload: '' });
-        if (response.data) {
-            navigate('Transaction');
+        dispatch({ type: 'refresh_transaction', payload: response.data });
+        if (!response.data) {
+            navigate('License');
         }
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
@@ -245,7 +279,7 @@ const initialRefreshTransaction = dispatch => async () => {
 
 const cancelBooking = dispatch => async () => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
+        dispatch({ type: 'loading', payload: 'Canceling...' });
         const response = await router.delete('/transaction/cancel');
         const update = response.data.update;
         if (update === 1) {
@@ -262,7 +296,6 @@ const cancelBooking = dispatch => async () => {
 
 const fetchHistories = dispatch => async () => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
         response = await router.get('/transaction/history');
         dispatch({ type: 'fetch_histories', payload: response.data });
     } catch (err) {
@@ -270,11 +303,30 @@ const fetchHistories = dispatch => async () => {
     }
 };
 
+const refreshHistories = dispatch => async () => {
+    try {
+        dispatch({ type: 'refresh' });
+        response = await router.get('/transaction/history');
+        dispatch({ type: 'refresh_histories', payload: response.data });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
 const fetchHistoryDetails = dispatch => async ({ createdDate }) => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
         response = await router.post('/transaction/history/detail', { createdDate });
         dispatch({ type: 'fetch_historyDetails', payload: response.data });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
+const refreshHistoryDetails = dispatch => async ({ createdDate }) => {
+    try {
+        dispatch({ type: 'refresh' });
+        response = await router.post('/transaction/history/detail', { createdDate });
+        dispatch({ type: 'refresh_historyDetails', payload: response.data });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
@@ -285,13 +337,17 @@ export const { Context, Provider } = createDataContext(
     {
         setLicense,
         fetchZones,
+        refreshZones,
         fetchSlots,
+        refreshSlots,
         fetchHistories,
+        refreshHistories,
         fetchHistoryDetails,
+        refreshHistoryDetails,
         selectSlot,
         saveTransaction,
         loadTransaction,
-        initialLoadTransaction,
+        refreshTransaction,
         initialRefreshTransaction,
         cancelBooking,
         clearErrorMessage,
@@ -303,5 +359,5 @@ export const { Context, Provider } = createDataContext(
         clearHistoryDetails,
         clearRange
     },
-    { license: null, zoneList: [], slotsName: [], slotsStatus: [], selectedSlot: '', transaction: {}, histories: [], historyDetails: [], range: null ,errorMessage: '', loading: '' }
+    { license: null, zoneList: [], slotsName: [], slotsStatus: [], selectedSlot: '', transaction: {}, histories: [], historyDetails: [], range: null ,errorMessage: '', loading: '', refreshing: false }
 );
