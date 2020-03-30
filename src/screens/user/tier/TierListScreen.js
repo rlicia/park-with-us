@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } fr
 import { NavigationEvents } from '@react-navigation/compat';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as TierContext } from '../../../contexts/TierContext';
 
 import Header from '../../../components/Header';
 
 const TierListScreen = ({ navigation, route }) => {
+    const { state: authState, refresh } = useContext(AuthContext);
     const { state, fetchTiers, refreshTiers, clearTierData } = useContext(TierContext);
     const status = route.params.status;
 
@@ -36,7 +38,12 @@ const TierListScreen = ({ navigation, route }) => {
             </View>
             <FlatList
                 refreshControl={
-                    <RefreshControl refreshing={state.refreshing} onRefresh={() => refreshTiers({ status })} />
+                    <RefreshControl
+                        refreshing={state.refreshing || authState.refreshing}
+                        onRefresh={() => {
+                            refreshTiers({ status });
+                            refresh();
+                        }} />
                 }
                 data={state.tier}
                 keyExtractor={item => item._id}
