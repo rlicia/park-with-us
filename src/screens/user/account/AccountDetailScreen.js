@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight, ScrollView, RefreshControl 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationEvents } from '@react-navigation/compat';
 
+import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as AccountContext } from '../../../contexts/AccountContext';
 
 import Header from '../../../components/Header';
@@ -110,6 +111,7 @@ const button = StyleSheet.create({
 });
 
 const AccountDetailScreen = ({ navigation, route }) => {
+    const { state: authState, refresh } = useContext(AuthContext);
     const { state, fetchAccountDetail, refreshAccountDetail, updateAccountStatus, clearAccountDetailData } = useContext(AccountContext);
     const user = route.params.item;
     const detail = state.accountDetail;
@@ -126,7 +128,12 @@ const AccountDetailScreen = ({ navigation, route }) => {
             />
             <ScrollView
                 refreshControl={
-                    <RefreshControl refreshing={state.refreshing} onRefresh={() => refreshAccountDetail({ username: user.username, id: user._id, status: user.status })} />
+                    <RefreshControl
+                        refreshing={state.refreshing || authState.refreshing}
+                        onRefresh={() => {
+                            refreshAccountDetail({ username: user.username, id: user._id, status: user.status });
+                            refresh();
+                        }} />
                 }
             >
                 <View style={styles.topContainer}>

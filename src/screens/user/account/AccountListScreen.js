@@ -2,11 +2,13 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, Keyboard, RefreshControl } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
+import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as AccountContext } from '../../../contexts/AccountContext';
 
 import Header from '../../../components/Header';
 
 const AccountListScreen = ({ navigation, route }) => {
+    const { state: authState, refresh } = useContext(AuthContext);
     const { state, fetchAccounts, refreshAccounts } = useContext(AccountContext);
     const [username, setUsername] = useState('');
     const status = route.params.status
@@ -39,7 +41,12 @@ const AccountListScreen = ({ navigation, route }) => {
                 <FlatList
                     style={{ flex: 1 }}
                     refreshControl={
-                        <RefreshControl refreshing={state.refreshing} onRefresh={() => refreshAccounts({ username, status })} />
+                        <RefreshControl
+                            refreshing={state.refreshing || authState.refreshing}
+                            onRefresh={() => {
+                                refreshAccounts({ username, status });
+                                refresh();
+                            }} />
                     }
                     data={state.account}
                     keyboardShouldPersistTaps='always'
