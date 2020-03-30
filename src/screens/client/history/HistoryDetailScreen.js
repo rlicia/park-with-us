@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import {  NavigationEvents } from '@react-navigation/compat';
 
+import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as TransactionContext } from '../../../contexts/TransactionContext';
 
 import Header from '../../../components/Header';
@@ -32,7 +33,8 @@ const contents = StyleSheet.create({
 
 const HistoryDetailScreen = ({ route }) => {
     const history = route.params.item;
-    const { state, fetchHistoryDetails, clearHistoryDetails } = useContext(TransactionContext);
+    const { state: authState, refresh } = useContext(AuthContext);
+    const { state, fetchHistoryDetails, refreshHistoryDetails, clearHistoryDetails } = useContext(TransactionContext);
 
     return (
         <Header
@@ -50,9 +52,10 @@ const HistoryDetailScreen = ({ route }) => {
             <FlatList
                 refreshControl={
                     <RefreshControl
-                        refreshing={state.loading ? true : false}
+                        refreshing={state.refreshing || authState.refreshing}
                         onRefresh={() => {
-                            fetchHistoryDetails({ createdDate: history.createdDate });
+                            refreshHistoryDetails({ createdDate: history.createdDate });
+                            refresh();
                     }} />
                 }
                 data={state.historyDetails}

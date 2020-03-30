@@ -2,12 +2,14 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, RefreshControl } from 'react-native';
 import {  NavigationEvents } from '@react-navigation/compat';
 
+import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as TransactionContext } from '../../../contexts/TransactionContext';
 
 import Header from '../../../components/Header';
 
 const HistoryScreen = ({ navigation }) => {
-    const { state, fetchHistories, clearHistories } = useContext(TransactionContext);
+    const { state: authState, refresh } = useContext(AuthContext);
+    const { state, fetchHistories, refreshHistories, clearHistories } = useContext(TransactionContext);
 
     return (
         <Header
@@ -24,9 +26,10 @@ const HistoryScreen = ({ navigation }) => {
             <FlatList
                 refreshControl={
                     <RefreshControl
-                        refreshing={state.loading ? true : false}
+                        refreshing={state.refreshing || authState.refreshing}
                         onRefresh={() => {
-                            fetchHistories();
+                            refreshHistories();
+                            refresh();
                     }} />
                 }
                 data={state.histories}
