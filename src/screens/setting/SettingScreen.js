@@ -67,7 +67,7 @@ const button = StyleSheet.create({
 });
 
 const SettingScreen = ({ navigation }) => {
-    const { state, refreshing, signout } = useContext(AuthContext);
+    const { state, refresh, signout } = useContext(AuthContext);
     
     return (
         <Header
@@ -76,7 +76,7 @@ const SettingScreen = ({ navigation }) => {
         >
             <ScrollView
                 refreshControl={
-                    <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => refreshing()} />
+                    <RefreshControl refreshing={state.refreshing} onRefresh={() => refresh()} />
                 }
             >
                 <View style={styles.topContainer}>
