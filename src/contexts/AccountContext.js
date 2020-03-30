@@ -7,18 +7,24 @@ const accountReducer = (state, action) => {
     switch (action.type) {
         case 'fetch_users':
             return { ...state, account: action.payload, loading: '' };
+        case 'refresh_users':
+            return { ...state, account: action.payload, refreshing: false };
         case 'fetch_user_detail':
             return { ...state, accountDetail: action.payload, loading: '' };
+        case 'refresh_user_detail':
+            return { ...state, accountDetail: action.payload, refreshing: false };
         case 'clear_account_data':
             return { ...state, account: [] };
         case 'clear_account_detail_data':
             return { ...state, accountDetail: {} };
         case 'add_error':
-            return { ...state, errorMessage: action.payload, loading: '' };
+            return { ...state, errorMessage: action.payload, loading: '', refreshing: false };
         case 'clear_error_message':
             return { ...state, errorMessage: '' };
         case 'loading':
             return { ...state, loading: action.payload };
+        case 'refresh':
+            return { ...state, refreshing: true };
         default:
             return state;
     }
@@ -77,11 +83,33 @@ const fetchAccounts = dispatch => async ({ username, status }) => {
     }
 };
 
+//Refresh Accounts
+const refreshAccounts = dispatch => async ({ username, status }) => {
+    try {
+        dispatch({ type: 'refresh' });
+        const response = await router.get(`/user/account/search/${status}/${username}`);
+        dispatch({ type: 'refresh_users', payload: response.data.user });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
 //Fetch Account Detail
 const fetchAccountDetail = dispatch => async ({ id, status }) => {
     try {
         const response = await router.get(`/user/account/detail/${status}/${id}`);
         dispatch({ type: 'fetch_user_detail', payload: response.data.detail });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
+//Fetch Account Detail
+const refreshAccountDetail = dispatch => async ({ id, status }) => {
+    try {
+        dispatch({ type: 'refresh' });
+        const response = await router.get(`/user/account/detail/${status}/${id}`);
+        dispatch({ type: 'refresh_user_detail', payload: response.data.detail });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
@@ -137,7 +165,9 @@ export const { Context, Provider } = createDataContext(
     {
         createUserAccount,
         fetchAccounts,
+        refreshAccounts,
         fetchAccountDetail,
+        refreshAccountDetail,
         updateAccountTier,
         updateAccountRfidTag,
         updateAccountStatus,
@@ -145,5 +175,5 @@ export const { Context, Provider } = createDataContext(
         clearAccountData,
         clearAccountDetailData
     },
-    { account: [], accountDetail: {}, errorMessage: '', loading: '' }
+    { account: [], accountDetail: {}, errorMessage: '', loading: '', refreshing: false }
 );

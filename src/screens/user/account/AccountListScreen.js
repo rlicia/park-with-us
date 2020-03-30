@@ -7,7 +7,7 @@ import { Context as AccountContext } from '../../../contexts/AccountContext';
 import Header from '../../../components/Header';
 
 const AccountListScreen = ({ navigation, route }) => {
-    const { state, fetchAccounts } = useContext(AccountContext);
+    const { state, fetchAccounts, refreshAccounts } = useContext(AccountContext);
     const [username, setUsername] = useState('');
     const status = route.params.status
     
@@ -21,6 +21,7 @@ const AccountListScreen = ({ navigation, route }) => {
                 inputStyle={styles.input}
                 inputContainerStyle={styles.inputContainer}
                 lightTheme={true}
+                showLoading={state.loading ? true : false}
                 autoCapitalize='none'
                 autoCorrect={false}
                 placeholder='Enter Username'
@@ -38,7 +39,7 @@ const AccountListScreen = ({ navigation, route }) => {
                 <FlatList
                     style={{ flex: 1 }}
                     refreshControl={
-                        <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => fetchAccounts({ username, status })} />
+                        <RefreshControl refreshing={state.refreshing} onRefresh={() => refreshAccounts({ username, status })} />
                     }
                     data={state.account}
                     keyboardShouldPersistTaps='always'

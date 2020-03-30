@@ -110,7 +110,7 @@ const button = StyleSheet.create({
 });
 
 const AccountDetailScreen = ({ navigation, route }) => {
-    const { state, fetchAccountDetail, updateAccountStatus, clearAccountDetailData } = useContext(AccountContext);
+    const { state, fetchAccountDetail, refreshAccountDetail, updateAccountStatus, clearAccountDetailData } = useContext(AccountContext);
     const user = route.params.item;
     const detail = state.accountDetail;
 
@@ -126,7 +126,7 @@ const AccountDetailScreen = ({ navigation, route }) => {
             />
             <ScrollView
                 refreshControl={
-                    <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => fetchAccountDetail({ username: user.username, id: user._id, status: user.status })} />
+                    <RefreshControl refreshing={state.refreshing} onRefresh={() => refreshAccountDetail({ username: user.username, id: user._id, status: user.status })} />
                 }
             >
                 <View style={styles.topContainer}>
