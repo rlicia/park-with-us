@@ -9,14 +9,14 @@ const { height } = Dimensions.get('window');
 import { Context as AuthContext } from '../contexts/AuthContext';
 import { Context as TransactionContext } from '../contexts/TransactionContext';
 
-const Content = ({ loading, content1, content2 }) => {
+const Content = ({ refreshing, content1, content2 }) => {
     const { refresh } = useContext(AuthContext);
 
     return (
         <ScrollView
             refreshControl={
                 <RefreshControl
-                    refreshing={loading}
+                    refreshing={refreshing}
                     onRefresh={() => {
                         refresh();
                 }} />
@@ -141,11 +141,11 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
                         : state.account.accountStatus === 1 ? userScreen ?
                         state.account.status === 0 ? children
                         : <Content
-                            loading={state.loading ? true : false}
+                            refreshing={state.refreshing}
                             content1='This screen is for ADMIN only.'
                         /> : children
                         : <Content
-                            loading={state.loading ? true : false}
+                            refreshing={state.refreshing}
                             content1='Your account is deactivated.'
                             content2='Please contact administrator.'
                         />

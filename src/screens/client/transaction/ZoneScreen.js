@@ -8,8 +8,8 @@ import { Context as TransactionContext } from '../../../contexts/TransactionCont
 import Header from '../../../components/Header';
 
 const ZoneScreen = ({ navigation }) => {
-    const { state: authState, refreshing } = useContext(AuthContext);
-    const { state: transactionState, fetchZones, clearZoneList, initialLoadTransaction } = useContext(TransactionContext);
+    const { state: authState, refresh } = useContext(AuthContext);
+    const { state: transactionState, fetchZones, refreshZones, clearZoneList, initialRefreshTransaction } = useContext(TransactionContext);
 
     return (
         <Header
@@ -34,11 +34,11 @@ const ZoneScreen = ({ navigation }) => {
             <FlatList
                 refreshControl={
                     <RefreshControl
-                        refreshing={transactionState.loading ? true : false}
+                        refreshing={transactionState.refreshing || authState.refreshing}
                         onRefresh={() => {
-                            fetchZones();
-                            refreshing();
-                            initialLoadTransaction();
+                            refreshZones();
+                            refresh();
+                            initialRefreshTransaction();
                     }} />
                 }
                 data={transactionState.zoneList}

@@ -9,10 +9,11 @@ import { Context as TransactionContext } from '../../../contexts/TransactionCont
 import { Context as AuthContext } from '../../../contexts/AuthContext';
 
 import Header from '../../../components/Header';
+import Loader from '../../../components/Loader';
 
 const LicenseScreen = () => {
-    const { refreshing } = useContext(AuthContext);
-    const { state, setLicense, initialLoadTransaction, clearRange, clearErrorMessage } = useContext(TransactionContext);
+    const { state: authState, refresh } = useContext(AuthContext);
+    const { state, setLicense, initialRefreshTransaction, clearRange, clearErrorMessage } = useContext(TransactionContext);
     const [licenseTitle, setLicenseTitle] = useState('');
     const [licenseNumber, setLicenseNumber] = useState('');
     const [err, setErr] = useState(null);
@@ -53,6 +54,10 @@ const LicenseScreen = () => {
             title='License'
             transactionScreen={true}
         >
+            <Loader
+                title={state.loading}
+                loading={state.loading ? true : false}
+            />
             <NavigationEvents
                 onWillBlur={() => {
                     setLicenseTitle('');
@@ -63,10 +68,10 @@ const LicenseScreen = () => {
             <KeyboardAwareScrollView
                 refreshControl={
                     <RefreshControl
-                        refreshing={state.loading ? true : false}
+                        refreshing={state.refreshing || authState.refreshing}
                         onRefresh={() => {
-                            refreshing();
-                            initialLoadTransaction();
+                            refresh();
+                            initialRefreshTransaction();
                     }} />
                 }
                 style={styles.container}

@@ -8,12 +8,13 @@ import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as TransactionContext } from '../../../contexts/TransactionContext';
 
 import Header from '../../../components/Header';
+import Loader from '../../../components/Loader';
 import ParkingMap from '../../../components/ParkingMap';
 
 const SlotScreen = ({ route }) => {
     const [err, setErr] = useState(null);
-    const { state: authState, refreshing } = useContext(AuthContext);
-    const { state: transactionState, initialLoadTransaction, fetchSlots, saveTransaction, clearSlotList, clearSelectedSlot, clearRange, clearErrorMessage } = useContext(TransactionContext);
+    const { state: authState, refresh } = useContext(AuthContext);
+    const { state: transactionState, initialRefreshTransaction, fetchSlots, refreshSlots, saveTransaction, clearSlotList, clearSelectedSlot, clearRange, clearErrorMessage } = useContext(TransactionContext);
     const zone = route.params.zone;
 
     return (
@@ -22,6 +23,10 @@ const SlotScreen = ({ route }) => {
             backButton='Zone'
             transactionScreen={true}
         >
+            <Loader
+                title={transactionState.loading}
+                loading={transactionState.loading ? true : false}
+            />
             <NavigationEvents
                 onWillFocus={() => fetchSlots({ zone: zone._id })}
                 onWillBlur={() => {
@@ -43,11 +48,11 @@ const SlotScreen = ({ route }) => {
             <ScrollView
                 refreshControl={
                     <RefreshControl
-                        refreshing={transactionState.loading ? true : false}
+                        refreshing={transactionState.refreshing || authState.refreshing}
                         onRefresh={() => {
-                            fetchSlots({ zone: zone._id });
-                            refreshing();
-                            initialLoadTransaction();
+                            refreshSlots({ zone: zone._id });
+                            refresh();
+                            initialRefreshTransaction();
                     }} />
                 }
             >
