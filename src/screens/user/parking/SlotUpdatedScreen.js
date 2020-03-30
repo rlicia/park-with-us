@@ -5,7 +5,6 @@ import { Button } from 'react-native-elements';
 import { Context as ParkingContext } from '../../../contexts/ParkingContext';
  
 import Header from '../../../components/Header';
-import { NavigationEvents } from '@react-navigation/compat';
 
 const SlotUpdatedScreen = ({ navigation }) => {
     const { state } = useContext(ParkingContext);
