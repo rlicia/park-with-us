@@ -58,6 +58,7 @@ import TierHomeScreen from './src/screens/user/tier/TierHomeScreen';
 import TierListScreen from './src/screens/user/tier/TierListScreen';
 import CreateTierScreen from './src/screens/user/tier/CreateTierScreen';
 import EditTierScreen from './src/screens/user/tier/EditTierScreen';
+import { StatusBar } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -306,6 +307,7 @@ export default () => {
           <AccountProvider>
             <TransactionProvider>
               <SafeAreaProvider>
+                <StatusBar barStyle="dark-content" />
                 <App />
               </SafeAreaProvider>
             </TransactionProvider>
