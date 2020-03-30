@@ -9,15 +9,19 @@ const authReducer = (state, action) => {
         case 'signin':
             return { ...state, token: action.payload, loading: '' };
         case 'signout':
-            return { token: null, account: {}, errorMessage: '', loading: '' };
+            return { token: null, account: {}, errorMessage: '' };
         case 'fetch_account':
             return { ...state, account: action.payload, loading: '' };
+        case 'refresh_account':
+            return { ...state, account: action.payload, refreshing: false };
         case 'add_error':
-            return { ...state, errorMessage: action.payload, loading: '' };
+            return { ...state, errorMessage: action.payload, loading: '', refreshing: false };
         case 'clear_error_message':
             return { ...state, errorMessage: '' };
         case 'loading':
             return { ...state, loading: action.payload };
+        case 'refresh':
+            return { ...state, refreshing: true };
         default:
             return state;
     }
@@ -172,20 +176,20 @@ const changePassword = dispatch => async ({ password, newPassword, confirmNewPas
 };
 
 //refresh
-const refreshing = dispatch => async () => {
+const refresh = dispatch => async () => {
     try {
-        dispatch({ type: 'loading', payload: 'Refreshing...' });
+        dispatch({ type: 'refresh' });
         const response = await router.get('/account');
-        dispatch({ type: 'fetch_account', payload: response.data.account });
+        dispatch({ type: 'refresh_account', payload: response.data.account });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
 };
 
-const initialRefreshing = dispatch => async () => {
+const initialRefresh = dispatch => async () => {
     try {
         const response = await router.get('/account');
-        dispatch({ type: 'fetch_account', payload: response.data.account });
+        dispatch({ type: 'refresh_account', payload: response.data.account });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
@@ -201,8 +205,8 @@ export const { Context, Provider } = createDataContext(
        editAccount,
        changePassword,
        clearErrorMessage,
-       refreshing,
-       initialRefreshing
+       refresh,
+       initialRefresh
     },
-    { token: null, account: {}, errorMessage: '', loading: '' }
+    { token: null, account: {}, errorMessage: '', loading: '', refreshing: false }
 );
