@@ -7,6 +7,8 @@ const tierReducer = (state, action) => {
     switch (action.type) {
         case 'fetch_tiers':
             return { ...state, tier: action.payload, loading: '' };
+        case 'refresh_tiers':
+            return { ...state, tier: action.payload, refreshing: false };
         case 'clear_tier_data':
             return { ...state, tier: [] };
         case 'add_error':
@@ -15,6 +17,8 @@ const tierReducer = (state, action) => {
             return { ...state, errorMessage: '' };
         case 'loading':
             return { ...state, loading: action.payload };
+        case 'refresh':
+            return { ...state, refreshing: true };
         default:
             return state;
     }
@@ -31,11 +35,21 @@ const clearTierData = dispatch => async () => {
 };
 
 //Fetch Tier
-const fetchTiers = dispatch => async ({ status, loading }) => {
+const fetchTiers = dispatch => async ({ status }) => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
         const response = await router.get(`/user/tier/${status}`);
         dispatch({ type: 'fetch_tiers', payload: response.data.tier });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
+//Refresh Tier
+const refreshTiers = dispatch => async ({ status }) => {
+    try {
+        dispatch({ type: 'refresh' });
+        const response = await router.get(`/user/tier/${status}`);
+        dispatch({ type: 'refresh_tiers', payload: response.data.tier });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
@@ -93,13 +107,14 @@ export const { Context, Provider } = createDataContext(
     tierReducer,
     {
         fetchTiers,
+        refreshTiers,
         createTier,
         editTier,
         deleteTier,
         clearTierData,
         clearErrorMessage
     },
-    { tier: [], errorMessage: '', loading: '' } //tier = array
+    { tier: [], errorMessage: '', loading: '', refreshing: false } //tier = array
 );
 
 

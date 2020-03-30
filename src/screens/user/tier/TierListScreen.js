@@ -6,10 +6,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Context as TierContext } from '../../../contexts/TierContext';
 
 import Header from '../../../components/Header';
-import Loader from '../../../components/Loader';
 
 const TierListScreen = ({ navigation, route }) => {
-    const { state, fetchTiers, clearTierData } = useContext(TierContext);
+    const { state, fetchTiers, refreshTiers, clearTierData } = useContext(TierContext);
     const status = route.params.status;
 
     return (
@@ -37,7 +36,7 @@ const TierListScreen = ({ navigation, route }) => {
             </View>
             <FlatList
                 refreshControl={
-                    <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => fetchTiers({ status })} />
+                    <RefreshControl refreshing={state.refreshing} onRefresh={() => refreshTiers({ status })} />
                 }
                 data={state.tier}
                 keyExtractor={item => item._id}

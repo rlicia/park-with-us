@@ -6,19 +6,23 @@ import { navigate } from '../navigationRef';
 const parkingReducer = (state, action) => {
     switch (action.type) {
         case 'fetch_slots':
-            return { ...state, slot: action.payload.slot, slotCount: action.payload.slotCount, loading: '' };
+            return { ...state, slot: action.payload.slot, slotCount: action.payload.slotCount };
+        case 'refresh_slots':
+            return { ...state, slot: action.payload.slot, slotCount: action.payload.slotCount, refreshing: false };
         case 'count_slot':
-            return { ...state, slotCount: action.payload, loading: '' };
+            return { ...state, slotCount: action.payload };
         case 'update_details':
             return { ...state, updateDetails: action.payload, loading: '' };
         case 'clear_slot_data':
             return { ...state, slot: [], slotCount: [] };
         case 'add_error':
-            return { ...state, errorMessage: action.payload, loading: '' };
+            return { ...state, errorMessage: action.payload, loading: '', refreshing: false };
         case 'clear_error_message':
             return { ...state, errorMessage: '' };
         case 'loading':
             return { ...state, loading: action.payload };
+        case 'refresh':
+            return { ...state, refreshing: true };
         default:
             return state;
     }
@@ -37,9 +41,19 @@ const clearSlotData = dispatch => async () => {
 //Get Slot
 const fetchSlots = dispatch => async () => {
     try {
-        dispatch({ type: 'loading', payload: 'Loading...' });
         const response = await router.get('/user/slot');
         dispatch({ type: 'fetch_slots', payload: { slot: response.data.zone, slotCount: response.data.slot } });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
+//Refresh Slot
+const refreshSlots = dispatch => async () => {
+    try {
+        dispatch({ type: 'refresh' });
+        const response = await router.get('/user/slot');
+        dispatch({ type: 'refresh_slots', payload: { slot: response.data.zone, slotCount: response.data.slot } });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });
     }
@@ -93,12 +107,13 @@ export const { Context, Provider } = createDataContext(
     parkingReducer,
     {
         fetchSlots,
+        refreshSlots,
         editCountInput,
         increaseOrDecrease,
         updateSlots,
         clearSlotData,
         clearErrorMessage
     },
-    { slot: [], slotCount: [], updateDetails: {}, errorMessage: '', loading: '' }
+    { slot: [], slotCount: [], updateDetails: {}, errorMessage: '', loading: '', refreshing: false }
 );
 

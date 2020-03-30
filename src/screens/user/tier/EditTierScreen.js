@@ -48,6 +48,7 @@ const EditTierScreen = ({ route }) => {
                 }}
             />
             <Loader
+                title={state.loading}
                 loading={state.loading ? true : false}
             />
             <KeyboardAwareScrollView
