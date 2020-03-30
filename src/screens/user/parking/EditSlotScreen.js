@@ -4,12 +4,14 @@ import { NavigationEvents } from '@react-navigation/compat';
 import { Input, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as ParkingContext } from '../../../contexts/ParkingContext';
 
 import Header from '../../../components/Header';
 import Loader from '../../../components/Loader';
 
 const EditSlotScreen = () => {
+    const { state: authState, refresh } = useContext(AuthContext);
     const { state, fetchSlots, refreshSlots, editCountInput, increaseOrDecrease, updateSlots, clearSlotData, clearErrorMessage } = useContext(ParkingContext);
     let totalCount = 0;
     for(i=0; i<state.slotCount.length; i++) {
@@ -40,7 +42,12 @@ const EditSlotScreen = () => {
             <View>
                 <FlatList
                     refreshControl={
-                        <RefreshControl refreshing={state.refreshing} onRefresh={() => refreshSlots()} />
+                        <RefreshControl
+                            refreshing={state.refreshing || authState.refreshing}
+                            onRefresh={() => {
+                                refreshSlots();
+                                refresh();
+                            }} />
                     }
                     data={state.slot}
                     keyboardShouldPersistTaps='always'
