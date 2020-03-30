@@ -12,7 +12,7 @@ const tierReducer = (state, action) => {
         case 'clear_tier_data':
             return { ...state, tier: [] };
         case 'add_error':
-            return { ...state, errorMessage: action.payload, loading: '' };
+            return { ...state, errorMessage: action.payload, loading: '', refreshing: false };
         case 'clear_error_message':
             return { ...state, errorMessage: '' };
         case 'loading':
