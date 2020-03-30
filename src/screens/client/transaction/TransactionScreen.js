@@ -6,16 +6,21 @@ import { Context as AuthContext } from '../../../contexts/AuthContext';
 import { Context as TransactionContext} from '../../../contexts/TransactionContext';
 
 import Header from '../../../components/Header';
+import Loader from '../../../components/Loader';
 import BookingTime from '../../../components/BookingTime';
 
 const TransactionScreen = () => {
-    const { refreshing } = useContext(AuthContext);
-    const { state, loadTransaction, clearTransaction } =useContext(TransactionContext);
+    const { state: authState, refresh } = useContext(AuthContext);
+    const { state, loadTransaction, refreshTransaction, clearTransaction } =useContext(TransactionContext);
 
     return (
         <Header
             title='Booking Detail'
         >
+            <Loader
+                title={state.loading}
+                loading={state.loading ? true : false}
+            />
             <NavigationEvents
                 onWillFocus={() => loadTransaction()}
                 onWillBlur={clearTransaction}
@@ -23,10 +28,10 @@ const TransactionScreen = () => {
             <ScrollView
                 refreshControl={
                     <RefreshControl
-                        refreshing={state.loading ? true : false}
+                        refreshing={state.refreshing || authState.refreshing}
                         onRefresh={() => {
-                            refreshing();
-                            loadTransaction();
+                            refresh();
+                            refreshTransaction();
                     }} />
                 }
             >
