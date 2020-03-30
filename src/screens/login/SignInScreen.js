@@ -26,6 +26,7 @@ const SignInScreen = () => {
                 onWillBlur={clearErrorMessage}
             />
             <Loader
+                title={state.loading}
                 loading={state.loading ? true : false}
             />
             <KeyboardAwareScrollView
