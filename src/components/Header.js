@@ -10,7 +10,7 @@ import { Context as AuthContext } from '../contexts/AuthContext';
 import { Context as TransactionContext } from '../contexts/TransactionContext';
 
 const Content = ({ loading, content1, content2 }) => {
-    const { refreshing } = useContext(AuthContext);
+    const { refresh } = useContext(AuthContext);
 
     return (
         <ScrollView
@@ -18,7 +18,7 @@ const Content = ({ loading, content1, content2 }) => {
                 <RefreshControl
                     refreshing={loading}
                     onRefresh={() => {
-                        refreshing();
+                        refresh();
                 }} />
             }
         >
@@ -35,7 +35,7 @@ const Content = ({ loading, content1, content2 }) => {
 };
 
 const Header = ({ navigation, title, backButton, headerRight, children, disableActivation, userScreen, loginScreen, transactionScreen }) => {
-    const { state, initialRefreshing } = useContext(AuthContext);
+    const { state, initialRefresh } = useContext(AuthContext);
     const { initialRefreshTransaction } = useContext(TransactionContext);
     const [networkError, setNetworkError] = useState(false);
 
@@ -107,7 +107,7 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
             <NavigationEvents
                 onWillFocus={() => {
                     if (!loginScreen) {
-                        initialRefreshing();
+                        initialRefresh();
                         if (transactionScreen) {
                             initialRefreshTransaction();
                         }
