@@ -47,7 +47,7 @@ const button = StyleSheet.create({
 });
 
 const UserHomeScreen = ({ navigation }) => {
-    const { state, refreshing } = useContext(AuthContext);
+    const { state, refresh } = useContext(AuthContext);
     
     return (
         <Header
@@ -56,7 +56,7 @@ const UserHomeScreen = ({ navigation }) => {
         >
             <ScrollView
                 refreshControl={
-                    <RefreshControl refreshing={state.loading ? true : false} onRefresh={() => refreshing()} />
+                    <RefreshControl refreshing={state.refreshing} onRefresh={() => refresh()} />
                 }
             >
                 <ButtonForm 
