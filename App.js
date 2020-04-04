@@ -7,7 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { setNavigator } from './src/navigationRef';
 
-//Context
+//Provider
 import { Provider as AuthProvider } from './src/contexts/AuthContext';
 import { Provider as TierProvider } from './src/contexts/TierContext';
 import { Provider as ParkingProvider } from './src/contexts/ParkingContext';
