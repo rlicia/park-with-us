@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
+import { createSwitchNavigator } from '@react-navigation/compat';
 
 import { setNavigator } from './src/navigationRef';
 
@@ -57,7 +59,6 @@ import TierHomeScreen from './src/screens/user/tier/TierHomeScreen';
 import TierListScreen from './src/screens/user/tier/TierListScreen';
 import CreateTierScreen from './src/screens/user/tier/CreateTierScreen';
 import EditTierScreen from './src/screens/user/tier/EditTierScreen';
-import { StatusBar } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -277,26 +278,11 @@ const UserFlow = () => {
   );
 };
 
-const App = () => {
-  return (
-    <NavigationContainer ref={(navigator) => setNavigator(navigator)}>
-      <Stack.Navigator screenOptions={stackScreenOptions}>
-        <Stack.Screen
-          name="LoginFlow"
-          component={LoginFlow}
-        />
-        <Stack.Screen
-          name="Client"
-          component={ClientFlow}
-        />
-        <Stack.Screen
-          name="User"
-          component={UserFlow}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+const App = createSwitchNavigator({
+  Login: LoginFlow,
+  Client: ClientFlow,
+  User: UserFlow
+});
 
 export default () => {
   return (
@@ -307,7 +293,9 @@ export default () => {
             <TransactionProvider>
               <SafeAreaProvider>
                 <StatusBar barStyle="dark-content" />
-                <App />
+                  <NavigationContainer ref={(navigator) => setNavigator(navigator)}>
+                    <App />
+                  </NavigationContainer>
               </SafeAreaProvider>
             </TransactionProvider>
           </AccountProvider>

@@ -124,7 +124,7 @@ const signin = dispatch => async ({ username, password }) => {
 const signout = dispatch => async () => {
     await AsyncStorage.removeItem('token');
     dispatch({ type: 'signout' });
-    navigate('LoginHome');
+    navigate('Login');
 };
 
 //edit profile
