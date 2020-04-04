@@ -167,16 +167,16 @@ const AccountDetailScreen = ({ navigation, route }) => {
                     />
                 </View>
                 <View style={styles.bottomContainer}>
-                    <ButtonForm 
-                        title='Change Tier'
-                        icon={<Icon name='pencil' size={22} />}
-                        onSubmit={() => navigation.navigate('EditAccountTier', { id: detail._id, tierId: detail.tierId, tier: detail.tier, status: user.status })}
-                    />
                     {user.status === 1 ? <ButtonForm
                         title='Change RFID Tag'
                         icon={<Icon name='tag' size={22} />}
                         onSubmit={() => navigation.navigate('EditAccountRfid', { id: detail._id, rfidTag: detail.rfidTag })}
                     /> : null}
+                    <ButtonForm 
+                        title='Change Tier'
+                        icon={<Icon name='pencil' size={22} />}
+                        onSubmit={() => navigation.navigate('EditAccountTier', { id: detail._id, tierId: detail.tierId, tier: detail.tier, status: user.status })}
+                    />
                     <ActivateForm
                         activate={detail.accountStatus}
                         onSubmit={() => updateAccountStatus({ id: detail._id, status: user.status })}
