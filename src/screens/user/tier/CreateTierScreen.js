@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { Text, StyleSheet, Keyboard, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Keyboard, ActivityIndicator } from 'react-native';
 import { NavigationEvents } from '@react-navigation/compat';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Button } from 'react-native-elements';
+import RNPickerSelect from 'react-native-picker-select';
 
 import { Context as TierContext } from '../../../contexts/TierContext';
 
@@ -11,9 +12,15 @@ import Loader from '../../../components/Loader';
 import InputForm from '../../../components/InputForm';
 
 const CreateTierScreen = ({ route }) => {
-    const { state, createTier, clearErrorMessage } = useContext(TierContext);
+    const { state, fetchTiers, createTier, clearTierData, clearErrorMessage } = useContext(TierContext);
     const [tierName, setTierName] = useState('');
+    const [order, setOrder] = useState(1);
+    const [orderTierLevel, setOrderTierLevel] = useState(-1);
     const status = route.params.status;
+    let pickerData = [];
+    for (i=0; i<state.tier.length-1; i++) { // minus -1 = not show not assigned tier
+        pickerData.push({ label: state.tier[i].tierName, value: state.tier[i].tierLevel });
+    };
 
     return (
         <Header
@@ -22,7 +29,11 @@ const CreateTierScreen = ({ route }) => {
             backButton='TierList'
         >
             <NavigationEvents
-                onWillBlur={clearErrorMessage}
+                onWillFocus={() => fetchTiers({ status })}
+                onWillBlur={() => {
+                    clearErrorMessage();
+                    clearTierData();
+                }}
             />
             <Loader
                 title={state.loading}
@@ -39,6 +50,31 @@ const CreateTierScreen = ({ route }) => {
                     value={tierName}
                     onChangeText={setTierName}
                 />
+                <Text style={styles.pickerTitle}>Select Order</Text>
+                <View style={styles.pickerContainer}>
+                    <View style={styles.orderPicker}>
+                        <RNPickerSelect 
+                            style={pickerSelectStyles}
+                            onValueChange={value => setOrder(value)}
+                            placeholder={{}}
+                            items={[
+                                { label: 'After', value: 1 },
+                                { label: 'Before', value: 0 }
+                            ]}
+                        />
+                    </View>
+                    <View style={styles.tierPicker}>
+                        <RNPickerSelect 
+                            style={pickerSelectStyles}
+                            onValueChange={value => setOrderTierLevel(value)}
+                            placeholder={{}}
+                            items={pickerData}
+                        />
+                    </View>
+                </View>
+                {status === 0 ? 
+                <Text>user tier</Text>
+                : null}
                 {state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
                 <Button
                     titleStyle={styles.buttonTitle}
@@ -47,7 +83,7 @@ const CreateTierScreen = ({ route }) => {
                     title='Create Tier'
                     onPress={() => {
                         Keyboard.dismiss();
-                        createTier({ tierName, status });
+                        createTier({ tierName, order, orderTierLevel, status });
                     }}
                 />
             </KeyboardAwareScrollView>
@@ -55,14 +91,51 @@ const CreateTierScreen = ({ route }) => {
     );
 };
 
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 10,
+      marginHorizontal: 5,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 10,
+      color: 'black'
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      marginHorizontal: 5,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 10,
+      color: 'black'
+    }
+});
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 15,
+        paddingTop: 10,
         paddingHorizontal: 15
     },
     inputLabel: {
         color: '#00AB66'
+    },
+    pickerTitle: {
+        margin: 10
+    },
+    pickerContainer: {
+        flexDirection: 'row',
+        marginHorizontal: 5,
+        marginBottom: 10
+    },
+    orderPicker: {
+        flex: 3
+    },
+    tierPicker: {
+        flex: 8
     },
     errorMessage: {
         marginHorizontal: 10,
