@@ -100,7 +100,7 @@ const EditTierScreen = ({ route }) => {
                     title='Save'
                     onPress={() => {
                         Keyboard.dismiss();
-                        editTier({ id: tier._id, tierName, order, orderTierLevel, status });
+                        editTier({ id: tier._id, tierName, order, orderTierLevel, permissions: state.permissions, status });
                     }}
                 />
             </KeyboardAwareScrollView>
