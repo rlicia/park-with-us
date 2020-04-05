@@ -167,20 +167,34 @@ const AccountDetailScreen = ({ navigation, route }) => {
                     />
                 </View>
                 <View style={styles.bottomContainer}>
-                    {user.status === 1 ? <ButtonForm
-                        title='Change RFID Tag'
-                        icon={<Icon name='tag' size={22} />}
-                        onSubmit={() => navigation.navigate('EditAccountRfid', { id: detail._id, rfidTag: detail.rfidTag })}
-                    /> : null}
-                    <ButtonForm 
-                        title='Change Tier'
-                        icon={<Icon name='pencil' size={22} />}
-                        onSubmit={() => navigation.navigate('EditAccountTier', { id: detail._id, tierId: detail.tierId, tier: detail.tier, status: user.status })}
-                    />
-                    <ActivateForm
-                        activate={detail.accountStatus}
-                        onSubmit={() => updateAccountStatus({ id: detail._id, status: user.status })}
-                    />
+                    {
+                        authState.account.permissions.indexOf('edit_client_rfid_tag') > -1 && user.status === 1 ?
+                            <ButtonForm
+                                title='Change RFID Tag'
+                                icon={<Icon name='tag' size={22} />}
+                                onSubmit={() => navigation.navigate('EditAccountRfid', { id: detail._id, rfidTag: detail.rfidTag })}
+                            />
+                        : null
+                    }
+                    {
+                        (authState.account.permissions.indexOf('edit_client_tier') > -1 && user.status === 1) ||
+                        (authState.account.permissions.indexOf('edit_user_tier') > -1 && user.status === 0) ?
+                            <ButtonForm 
+                                title='Change Tier'
+                                icon={<Icon name='pencil' size={22} />}
+                                onSubmit={() => navigation.navigate('EditAccountTier', { id: detail._id, tierId: detail.tierId, tier: detail.tier, status: user.status })}
+                            />
+                        : null
+                    }
+                    {
+                        (authState.account.permissions.indexOf('edit_client_status') > -1 && user.status === 1) ||
+                        (authState.account.permissions.indexOf('edit_user_status') > -1 && user.status === 0) ?
+                            <ActivateForm
+                                activate={detail.accountStatus}
+                                onSubmit={() => updateAccountStatus({ id: detail._id, status: user.status })}
+                            />
+                        : null
+                    }
                 </View>
             </ScrollView>
         </Header>

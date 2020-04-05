@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableHighlight } from 'react-native';
 
+import { Context as AuthContext } from '../../../contexts/AuthContext';
+
 import Header from '../../../components/Header';
 
 const ButtonForm = ({ title, onSubmit }) => {
@@ -37,6 +39,8 @@ const button = StyleSheet.create({
 });
 
 const TierHomeScreen = ({ navigation }) => {
+    const { state } = useContext(AuthContext);
+
     return (
         <Header
             title='Tier'
@@ -44,14 +48,24 @@ const TierHomeScreen = ({ navigation }) => {
             backButton='UserHome'
         >
             <ScrollView>
-                <ButtonForm 
-                    title='Client'
-                    onSubmit={() => navigation.navigate('TierList', { status: 1 })}
-                />
-                <ButtonForm
-                    title='User'
-                    onSubmit={() => navigation.navigate('TierList', { status: 0 })}
-                />
+                {
+                    state.account.permissions.indexOf('search_client_tier') > -1 ||
+                    state.account.permissions.indexOf('create_edit_client_tier') > -1 ?
+                        <ButtonForm 
+                            title='Client'
+                            onSubmit={() => navigation.navigate('TierList', { status: 1 })}
+                        />
+                    : null
+                }
+                {
+                    state.account.permissions.indexOf('search_user_tier') > -1 ||
+                    state.account.permissions.indexOf('create_edit_user_tier') > -1 ?
+                        <ButtonForm
+                            title='User'
+                            onSubmit={() => navigation.navigate('TierList', { status: 0 })}
+                        />
+                    : null
+                }
             </ScrollView>
         </Header>
     );

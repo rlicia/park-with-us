@@ -36,10 +36,6 @@ const Permissions = () => {
             <Text style={styles.permissionTitle}>Select Permissions</Text>
             <View style={styles.permissionContainer}>
                 <CheckPermission
-                    title='Edit Parking Slot'
-                    value='edit_parking'
-                />
-                <CheckPermission
                     title='Search Client Account'
                     value='search_client_account'
                 />
@@ -66,6 +62,10 @@ const Permissions = () => {
                 <CheckPermission
                     title='Edit User Activation Status'
                     value='edit_user_status'
+                />
+                <CheckPermission
+                    title='Edit Parking Slot'
+                    value='edit_parking'
                 />
                 <CheckPermission
                     title='Search Client Tier'

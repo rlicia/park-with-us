@@ -59,26 +59,49 @@ const UserHomeScreen = ({ navigation }) => {
                     <RefreshControl refreshing={state.refreshing} onRefresh={() => refresh()} />
                 }
             >
-                <ButtonForm 
-                    title='Parking Space'
-                    icon={<Icon name='car' size={22} />}
-                    onSubmit={() => navigation.navigate('EditSlot')}
-                />
-                <ButtonForm
-                    title='Client & User'
-                    icon={<Icon name='users' size={22} />}
-                    onSubmit={() => navigation.navigate('AccountHome')}
-                />
-                <ButtonForm
-                    title='Tier'
-                    icon={<Icon name='pencil' size={22} />}
-                    onSubmit={() => navigation.navigate('TierHome')}
-                />
-                <ButtonForm 
-                    title='Create User Account'
-                    icon={<Icon name='user-plus' size={22} />}
-                    onSubmit={() => navigation.navigate('CreateUser')}
-                />
+                {
+                    state.account.permissions.indexOf('search_client_account') > -1 ||
+                    state.account.permissions.indexOf('edit_client_rfid_tag') > -1 ||
+                    state.account.permissions.indexOf('edit_client_tier') > -1 ||
+                    state.account.permissions.indexOf('edit_client_status') > -1 ||
+                    state.account.permissions.indexOf('search_user_account') > -1 ||
+                    state.account.permissions.indexOf('edit_user_tier') > -1 ||
+                    state.account.permissions.indexOf('edit_user_status') > -1 ?
+                        <ButtonForm
+                            title='Client & User'
+                            icon={<Icon name='users' size={22} />}
+                            onSubmit={() => navigation.navigate('AccountHome')}
+                        />
+                    : null
+                }
+                {state.account.permissions.indexOf('edit_parking') > -1 ?
+                    <ButtonForm 
+                        title='Parking Space'
+                        icon={<Icon name='car' size={22} />}
+                        onSubmit={() => navigation.navigate('EditSlot')}
+                    />
+                : null}
+                {
+                    state.account.permissions.indexOf('search_client_tier') > -1 ||
+                    state.account.permissions.indexOf('create_edit_client_tier') > -1 ||
+                    state.account.permissions.indexOf('search_user_tier') > -1 ||
+                    state.account.permissions.indexOf('create_edit_user_tier') > -1 ?
+                        <ButtonForm
+                            title='Tier'
+                            icon={<Icon name='pencil' size={22} />}
+                            onSubmit={() => navigation.navigate('TierHome')}
+                        />
+                    : null
+                }
+                {
+                    state.account.permissions.indexOf('create_user_account') > -1 ?
+                        <ButtonForm 
+                            title='Create User Account'
+                            icon={<Icon name='user-plus' size={22} />}
+                            onSubmit={() => navigation.navigate('CreateUser')}
+                        />
+                    : null
+                }
             </ScrollView>
         </Header>
     );

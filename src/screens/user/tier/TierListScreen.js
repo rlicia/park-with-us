@@ -19,14 +19,17 @@ const TierListScreen = ({ navigation, route }) => {
             userScreen={true}
             backButton='TierHome'
             headerRight={
-                <TouchableOpacity 
-                    style={{ flex: 1, alignItems: 'center' }}
-                    onPress={() => {
-                        navigation.navigate('CreateTier', { status });
-                    }}
-                >
-                    <Icon name='plus' size={26} />
-                </TouchableOpacity>
+                (authState.account.permissions.indexOf('create_edit_client_tier') > -1 && status === 1) ||
+                (authState.account.permissions.indexOf('create_edit_user_tier') > -1 && status === 0) ?
+                    <TouchableOpacity 
+                        style={{ flex: 1, alignItems: 'center' }}
+                        onPress={() => {
+                            navigation.navigate('CreateTier', { status });
+                        }}
+                    >
+                        <Icon name='plus' size={26} />
+                    </TouchableOpacity>
+                : null
             }
         >
             <NavigationEvents
@@ -60,12 +63,15 @@ const TierListScreen = ({ navigation, route }) => {
                                     </Text>
                                 </View>
                                 {item.tierLevel !== 0 ?
-                                    <TouchableOpacity
-                                        style={styles.listIcon}
-                                        onPress={() => navigation.navigate('EditTier', { item, status })}
-                                    >
-                                        <Icon name='pencil' size={20} />
-                                    </TouchableOpacity>
+                                    (authState.account.permissions.indexOf('create_edit_client_tier') > -1 && status === 1) ||
+                                    (authState.account.permissions.indexOf('create_edit_user_tier') > -1 && status === 0) ?
+                                        <TouchableOpacity
+                                            style={styles.listIcon}
+                                            onPress={() => navigation.navigate('EditTier', { item, status })}
+                                        >
+                                            <Icon name='pencil' size={20} />
+                                        </TouchableOpacity>
+                                    : null
                                 : null}
                             </View>
                         </View>
