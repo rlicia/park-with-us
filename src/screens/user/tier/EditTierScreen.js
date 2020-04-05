@@ -88,7 +88,7 @@ const EditTierScreen = ({ route }) => {
                 <Button
                     titleStyle={styles.buttonTitle}
                     buttonStyle={styles.button}
-                    containerStyle={styles.buttonContainer}
+                    containerStyle={status === 1 ? styles.buttonClientContainer : styles.buttonUserContainer}
                     title='Save'
                     onPress={() => {
                         Keyboard.dismiss();
@@ -133,7 +133,9 @@ const styles = StyleSheet.create({
         color: '#00AB66'
     },
     pickerTitle: {
-        margin: 10
+        margin: 10,
+        fontSize: 18,
+        fontWeight: 'bold'
     },
     pickerContainer: {
         flexDirection: 'row',
@@ -151,9 +153,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'red'
     },
-    buttonContainer: {
+    buttonClientContainer: {
         marginHorizontal: 15,
         marginVertical: 30
+    },
+    buttonUserContainer: {
+        marginHorizontal: 15,
+        marginTop: 15,
+        marginBottom: 30
     },
     button: {
         height: 50,
