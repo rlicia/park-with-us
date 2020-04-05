@@ -123,6 +123,7 @@ const selectPermissions = dispatch => async (value) => {
 //get permissions
 const fetchPermissions = dispatch => async ({ id }) => {
     try {
+        dispatch({ type: 'loading', payload: 'Loading...' });
         const response = await router.get(`/user/tier/permissions/${id}`);
         dispatch({ type: 'add_permissions', payload: response.data.permissions });
     } catch (err) {
