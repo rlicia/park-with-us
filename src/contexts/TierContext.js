@@ -85,7 +85,7 @@ const createTier = dispatch => async ({ tierName, order, orderTierLevel, permiss
 };
 
 //Edit Tier
-const editTier = dispatch => async ({ id, tierName, order, orderTierLevel, status }) => {
+const editTier = dispatch => async ({ id, tierName, order, orderTierLevel, permissions, status }) => {
     if (!tierName) {
         return dispatch({ type: 'add_error', payload: 'Must provide tier name' });
     }
@@ -96,7 +96,7 @@ const editTier = dispatch => async ({ id, tierName, order, orderTierLevel, statu
 
     try {
         dispatch({ type: 'loading', payload: 'Saving...' });
-        await router.put(`/user/tier/${status}/${id}`, { tierName, order, orderTierLevel });
+        await router.put(`/user/tier/${status}/${id}`, { tierName, order, orderTierLevel, permissions });
         dispatch({ type: 'loading', payload: '' });
         navigate('TierList');
     } catch (err) {
@@ -120,6 +120,16 @@ const selectPermissions = dispatch => async (value) => {
     dispatch({ type: 'add_permissions', payload: value });
 };
 
+//get permissions
+const fetchPermissions = dispatch => async ({ id }) => {
+    try {
+        const response = await router.get(`/user/tier/permissions/${id}`);
+        dispatch({ type: 'add_permissions', payload: response.data.permissions });
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
 export const { Context, Provider } = createDataContext(
     tierReducer,
     {
@@ -129,6 +139,7 @@ export const { Context, Provider } = createDataContext(
         editTier,
         deleteTier,
         selectPermissions,
+        fetchPermissions,
         clearTierData,
         clearPermissions,
         clearErrorMessage
