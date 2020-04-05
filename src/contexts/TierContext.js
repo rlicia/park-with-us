@@ -9,8 +9,12 @@ const tierReducer = (state, action) => {
             return { ...state, tier: action.payload, loading: '' };
         case 'refresh_tiers':
             return { ...state, tier: action.payload, refreshing: false };
+        case 'add_permissions':
+            return { ...state, permissions: action.payload };
         case 'clear_tier_data':
             return { ...state, tier: [] };
+        case 'clear_permissions':
+            return { ...state, permissions: [] };
         case 'add_error':
             return { ...state, errorMessage: action.payload, loading: '', refreshing: false };
         case 'clear_error_message':
@@ -32,6 +36,11 @@ const clearErrorMessage = dispatch => async () => {
 //Clear Tier Data
 const clearTierData = dispatch => async () => {
     dispatch({ type: 'clear_tier_data' });
+};
+
+//Clear Permissions
+const clearPermissions = dispatch => async () => {
+    dispatch({ type: 'clear_permissions' });
 };
 
 //Fetch Tier
@@ -67,7 +76,7 @@ const createTier = dispatch => async ({ tierName, order, orderTierLevel, permiss
 
     try {
         dispatch({ type: 'loading', payload: 'Creating...' });
-        await router.post(`/user/tier/${status}`, { tierName, order, orderTierLevel });
+        await router.post(`/user/tier/${status}`, { tierName, order, orderTierLevel, permissions });
         dispatch({ type: 'loading', payload: '' });
         navigate('TierList');
     } catch (err) {
@@ -107,6 +116,10 @@ const deleteTier = dispatch => async ({ id, status }) => {
     }
 };
 
+const selectPermissions = dispatch => async (value) => {
+    dispatch({ type: 'add_permissions', payload: value });
+};
+
 export const { Context, Provider } = createDataContext(
     tierReducer,
     {
@@ -115,10 +128,12 @@ export const { Context, Provider } = createDataContext(
         createTier,
         editTier,
         deleteTier,
+        selectPermissions,
         clearTierData,
+        clearPermissions,
         clearErrorMessage
     },
-    { tier: [], errorMessage: '', loading: '', refreshing: false } //tier = array
+    { tier: [], permissions: [], errorMessage: '', loading: '', refreshing: false } //tier = array
 );
 
 
