@@ -68,7 +68,7 @@ const EditTierScreen = ({ route }) => {
                         <RNPickerSelect 
                             style={pickerSelectStyles}
                             onValueChange={value => setOrder(value)}
-                            placeholder={{ label: 'Order...', value: null}}
+                            placeholder={{ label: 'Order...', value: null }}
                             items={[
                                 { label: 'After', value: 1 },
                                 { label: 'Before', value: 0 }
@@ -79,7 +79,7 @@ const EditTierScreen = ({ route }) => {
                         <RNPickerSelect 
                             style={pickerSelectStyles}
                             onValueChange={value => setOrderTierLevel(value)}
-                            placeholder={{ label: 'Select Tier...', value: null}}
+                            placeholder={{ label: 'Not Change...', value: null }}
                             items={pickerData}
                         />
                     </View>
@@ -126,7 +126,7 @@ const pickerSelectStyles = StyleSheet.create({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 15,
+        paddingTop: 10,
         paddingHorizontal: 15
     },
     inputLabel: {
