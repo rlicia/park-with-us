@@ -74,9 +74,7 @@ const CreateTierScreen = ({ route }) => {
                         />
                     </View>
                 </View>
-                {status === 0 ? 
-                <Permissions />
-                : null}
+                {status === 0 ? <Permissions /> : null}
                 {state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
                 <Button
                     titleStyle={styles.buttonTitle}
