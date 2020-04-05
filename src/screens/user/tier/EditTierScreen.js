@@ -11,9 +11,10 @@ import { Context as TierContext } from '../../../contexts/TierContext';
 import Header from '../../../components/Header';
 import Loader from '../../../components/Loader';
 import InputForm from '../../../components/InputForm';
+import Permissions from '../../../components/Permissions';
 
 const EditTierScreen = ({ route }) => {
-    const { state, fetchTiers, editTier, deleteTier, clearTierData, clearErrorMessage } = useContext(TierContext);
+    const { state, fetchTiers, editTier, deleteTier, fetchPermissions, clearPermissions, clearTierData, clearErrorMessage } = useContext(TierContext);
     const tier = route.params.item;
     const status = route.params.status;
     const [tierName, setTierName] = useState(tier.tierName);
@@ -25,7 +26,7 @@ const EditTierScreen = ({ route }) => {
             pickerData.push({ label: state.tier[i].tierName, value: state.tier[i].tierLevel });
         }
     }
-    
+
     return (
         <Header
             title='Edit Tier'
@@ -41,10 +42,16 @@ const EditTierScreen = ({ route }) => {
             }
         >
             <NavigationEvents
-                onWillFocus={() => fetchTiers({ status })}
+                onWillFocus={() => {
+                    fetchTiers({ status });
+                    if (status === 0) {
+                        fetchPermissions({ id: tier._id });
+                    }
+                }}
                 onWillBlur={() => {
                     clearErrorMessage();
                     clearTierData();
+                    clearPermissions();
                 }}
             />
             <Loader
@@ -84,6 +91,7 @@ const EditTierScreen = ({ route }) => {
                         />
                     </View>
                 </View>
+                {status === 0 ? <Permissions /> : null}
                 {state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
                 <Button
                     titleStyle={styles.buttonTitle}
