@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     orderPicker: {
-        flex: 3
+        flex: 4
     },
     tierPicker: {
         flex: 8
