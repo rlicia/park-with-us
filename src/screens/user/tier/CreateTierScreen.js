@@ -10,9 +10,10 @@ import { Context as TierContext } from '../../../contexts/TierContext';
 import Header from '../../../components/Header';
 import Loader from '../../../components/Loader';
 import InputForm from '../../../components/InputForm';
+import Permissions from '../../../components/Permissions';
 
 const CreateTierScreen = ({ route }) => {
-    const { state, fetchTiers, createTier, clearTierData, clearErrorMessage } = useContext(TierContext);
+    const { state, fetchTiers, createTier, clearTierData, clearPermissions,  clearErrorMessage } = useContext(TierContext);
     const [tierName, setTierName] = useState('');
     const [order, setOrder] = useState(1);
     const [orderTierLevel, setOrderTierLevel] = useState(-1);
@@ -33,6 +34,7 @@ const CreateTierScreen = ({ route }) => {
                 onWillBlur={() => {
                     clearErrorMessage();
                     clearTierData();
+                    clearPermissions();
                 }}
             />
             <Loader
@@ -73,17 +75,17 @@ const CreateTierScreen = ({ route }) => {
                     </View>
                 </View>
                 {status === 0 ? 
-                <Text>user tier</Text>
+                <Permissions />
                 : null}
                 {state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null}
                 <Button
                     titleStyle={styles.buttonTitle}
                     buttonStyle={styles.button}
-                    containerStyle={styles.buttonContainer}
+                    containerStyle={status === 1 ? styles.buttonClientContainer : styles.buttonUserContainer}
                     title='Create Tier'
                     onPress={() => {
                         Keyboard.dismiss();
-                        createTier({ tierName, order, orderTierLevel, status });
+                        createTier({ tierName, order, orderTierLevel, permissions: state.permissions, status });
                     }}
                 />
             </KeyboardAwareScrollView>
@@ -124,7 +126,9 @@ const styles = StyleSheet.create({
         color: '#00AB66'
     },
     pickerTitle: {
-        margin: 10
+        margin: 10,
+        fontSize: 18,
+        fontWeight: 'bold'
     },
     pickerContainer: {
         flexDirection: 'row',
@@ -142,9 +146,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'red'
     },
-    buttonContainer: {
+    buttonClientContainer: {
         marginHorizontal: 15,
         marginVertical: 30
+    },
+    buttonUserContainer: {
+        marginHorizontal: 15,
+        marginTop: 15,
+        marginBottom: 30
     },
     button: {
         height: 50,
