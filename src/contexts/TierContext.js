@@ -56,14 +56,18 @@ const refreshTiers = dispatch => async ({ status }) => {
 };
 
 //Create Tier
-const createTier = dispatch => async ({ tierName, status }) => {
+const createTier = dispatch => async ({ tierName, order, orderTierLevel, permissions, status }) => {
     if (!tierName) {
         return dispatch({ type: 'add_error', payload: 'Must provide tier name' });
     }
 
+    if (status === 0 && !permissions) {
+        return dispatch({ type: 'add_error', payload: 'Must provide permissions' });
+    }
+
     try {
         dispatch({ type: 'loading', payload: 'Creating...' });
-        await router.post(`/user/tier/${status}`, { tierName, status });
+        await router.post(`/user/tier/${status}`, { tierName, order, orderTierLevel });
         dispatch({ type: 'loading', payload: '' });
         navigate('TierList');
     } catch (err) {
