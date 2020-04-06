@@ -11,7 +11,7 @@ import BookingTime from '../../../components/BookingTime';
 
 const TransactionScreen = () => {
     const { state: authState, refresh } = useContext(AuthContext);
-    const { state, loadTransaction, refreshTransaction, clearTransaction } =useContext(TransactionContext);
+    const { state, loadTransaction, refreshTransaction, clearLicense, clearTransaction } =useContext(TransactionContext);
 
     return (
         <Header
@@ -23,7 +23,10 @@ const TransactionScreen = () => {
                 loading={state.loading ? true : false}
             />
             <NavigationEvents
-                onWillFocus={() => loadTransaction()}
+                onWillFocus={() => {
+                    loadTransaction();
+                    clearLicense();
+                }}
                 onWillBlur={clearTransaction}
             />
             <ScrollView
