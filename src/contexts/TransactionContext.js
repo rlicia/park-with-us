@@ -64,6 +64,8 @@ const transactionReducer = (state, action) => {
             return { ...state, transaction: action.payload, refreshing: false };
         case 'add_range':
             return { ...state, range: action.payload };
+        case 'clear_license':
+            return { ...state, license: null };
         case 'clear_zones':
             return { ...state, zoneList: [] };
         case 'clear_slots':
@@ -94,6 +96,11 @@ const transactionReducer = (state, action) => {
 //Clear error message
 const clearErrorMessage = dispatch => async () => {
     dispatch({ type: 'clear_error_message' });
+};
+
+//Clear License
+const clearLicense = dispatch => async () => {
+    dispatch({ type: 'clear_license' });
 };
 
 //Clear Zone List
@@ -351,6 +358,7 @@ export const { Context, Provider } = createDataContext(
         initialRefreshTransaction,
         cancelBooking,
         clearErrorMessage,
+        clearLicense,
         clearZoneList,
         clearSlotList,
         clearSelectedSlot,
