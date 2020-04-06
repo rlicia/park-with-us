@@ -123,8 +123,8 @@ const signin = dispatch => async ({ username, password }) => {
 //signout
 const signout = dispatch => async () => {
     await AsyncStorage.removeItem('token');
-    dispatch({ type: 'signout' });
     navigate('Login');
+    dispatch({ type: 'signout' });
 };
 
 //edit profile
