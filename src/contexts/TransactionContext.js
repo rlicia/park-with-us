@@ -12,8 +12,8 @@ const getDistance = (longitude, latitude, location) => {
     var lat1 = latitude;
     
     //our location
-    var lon2 = location[0];
-    var lat2 = location[1];
+    var lon2 = -122.08//location[0];
+    var lat2 = 37.422//location[1];
     
     var R = 6371; // km
     
@@ -80,6 +80,8 @@ const transactionReducer = (state, action) => {
             return { ...state, historyDetails: [] };
         case 'clear_range':
             return { ...state, range: null };
+        case 'clear_all':
+            return { license: null, zoneList: [], slotsName: [], slotsStatus: [], selectedSlot: '', transaction: {}, histories: [], historyDetails: [], range: null ,errorMessage: '', loading: '', refreshing: false }
         case 'add_error':
             return { ...state, errorMessage: action.payload, loading: '', refreshing: false };
         case 'clear_error_message':
@@ -96,6 +98,11 @@ const transactionReducer = (state, action) => {
 //Clear error message
 const clearErrorMessage = dispatch => async () => {
     dispatch({ type: 'clear_error_message' });
+};
+
+//Clear Transaction
+const clearAll = dispatch => async () => {
+    dispatch({ type: 'clear_all' });
 };
 
 //Clear License
@@ -365,7 +372,8 @@ export const { Context, Provider } = createDataContext(
         clearTransaction,
         clearHistories,
         clearHistoryDetails,
-        clearRange
+        clearRange,
+        clearAll
     },
     { license: null, zoneList: [], slotsName: [], slotsStatus: [], selectedSlot: '', transaction: {}, histories: [], historyDetails: [], range: null ,errorMessage: '', loading: '', refreshing: false }
 );

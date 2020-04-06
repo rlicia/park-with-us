@@ -10,7 +10,8 @@ import { Context as AuthContext } from '../contexts/AuthContext';
 import { Context as TransactionContext } from '../contexts/TransactionContext';
 
 const Content = ({ refreshing, content1, content2 }) => {
-    const { refresh } = useContext(AuthContext);
+    const { activationRefresh } = useContext(AuthContext);
+    const { clearAll } = useContext(TransactionContext);
 
     return (
         <ScrollView
@@ -18,10 +19,13 @@ const Content = ({ refreshing, content1, content2 }) => {
                 <RefreshControl
                     refreshing={refreshing}
                     onRefresh={() => {
-                        refresh();
+                        activationRefresh();
                 }} />
             }
         >
+            <NavigationEvents
+                onWillFocus={() => clearAll()}
+            />
             <View style={styles.textContainer}>
                 <Text style={styles.text}>
                     {content1}

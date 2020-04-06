@@ -195,6 +195,23 @@ const initialRefresh = dispatch => async () => {
     }
 };
 
+const activationRefresh = dispatch => async () => {
+    try {
+        dispatch({ type: 'refresh' });
+        const response = await router.get('/account');
+        dispatch({ type: 'refresh_account', payload: response.data.account });
+        if (response.data.account.accountStatus === 1) {
+            if (response.data.account.status === 1) {
+                navigate('License');
+            } else if (response.data.account.status === 0) {
+                navigate('UserHome');
+            }
+        }
+    } catch (err) {
+        dispatch({ type: 'add_error', payload: err.response.data.error });
+    }
+};
+
 export const { Context, Provider } = createDataContext(
     authReducer,
     {
@@ -206,7 +223,8 @@ export const { Context, Provider } = createDataContext(
        changePassword,
        clearErrorMessage,
        refresh,
-       initialRefresh
+       initialRefresh,
+       activationRefresh
     },
     { token: null, account: {}, errorMessage: '', loading: '', refreshing: false }
 );
