@@ -233,6 +233,7 @@ const ClientFlow = () => {
         }
       })}
       tabBarOptions={tabBarOptions}
+      initialRouteName="Booking"
     >
       <Tab.Screen
         name="Booking"
@@ -265,7 +266,9 @@ const UserFlow = () => {
           return <Icon name={iconName} size={20} color={color} />
         }
       })}
-      tabBarOptions={tabBarOptions}>
+      tabBarOptions={tabBarOptions}
+      initialRouteName="User Home"
+    >
       <Tab.Screen
         name="User Home"
         component={AdminFlow}
