@@ -145,11 +145,11 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     inputTitleStyle: {
-        flex: 4,
+        flex: 5,
         paddingHorizontal: 10
     },
     inputNumberStyle: {
-        flex: 5,
+        flex: 6,
         paddingHorizontal: 10
     },
     inputcontainerStyle: {
