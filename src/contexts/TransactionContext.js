@@ -3,7 +3,7 @@ import router from '../api/router';
 
 import { navigate } from '../navigationRef';
 
-const getDistance = (longitude, latitude, location) => {
+const getDistance = (longitude, latitude, location, within) => {
     const toRad = (x) => {
         return x * Math.PI / 180;
     }
@@ -28,8 +28,8 @@ const getDistance = (longitude, latitude, location) => {
     var d = R * c;
     console.log(d);
     var range;
-    if (d > 5) {
-        range = d-5;
+    if (d > within) {
+        range = d-within;
     } else {
         range = false
     }
@@ -170,8 +170,10 @@ const setLicense = dispatch => async ({ licenseTitle, licenseNumber, latitude, l
     
     try {
         const loc = await router.get('/location');
-        const location = loc.data;
-        const range = getDistance(longitude, latitude, location);
+        const location = loc.data.location;
+        const within = loc.data.within;
+        console.log(location, within)
+        const range = getDistance(longitude, latitude, location, within);
         if (range) {
             return dispatch({ type: 'add_range', payload: range });
         }
@@ -239,8 +241,9 @@ const saveTransaction = dispatch => async ({ slot, license, zone, latitude, long
 
     try {
         const loc = await router.get('/location');
-        const location = loc.data;
-        const range = getDistance(longitude, latitude, location);
+        const location = loc.data.location;
+        const within = loc.data.within;
+        const range = getDistance(longitude, latitude, location, within);
         if (range) {
             return dispatch({ type: 'add_range', payload: range });
         }
