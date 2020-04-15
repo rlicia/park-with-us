@@ -153,7 +153,7 @@ const updateAccountRfidTag = dispatch => async ({ id, rfidTag, newRfidTag }) => 
 const updateAccountStatus = dispatch => async ({ id, status }) => {
     try {
         dispatch({ type: 'loading', payload: 'Updating...' });
-        const response = await router.put(`/user/account/detail/${status}/${id}/rfid/status`);
+        const response = await router.put(`/user/account/detail/${status}/${id}/status`);
         dispatch({ type: 'fetch_user_detail', payload: response.data.detail });
     } catch (err) {
         dispatch({ type: 'add_error', payload: err.response.data.error });

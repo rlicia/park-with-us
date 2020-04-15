@@ -709,6 +709,7 @@
 			baseConfigurationReference = 1A50AD14992F9AEEA4CDA9BA /* Pods-ParkWithUs-ParkWithUsTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 733GUDD3S8;
 				INFOPLIST_FILE = ParkWithUsTests/Info.plist;
