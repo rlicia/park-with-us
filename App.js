@@ -69,7 +69,10 @@ const stackScreenOptions = {
 
 const LoginFlow = () => {
   return (
-    <Stack.Navigator screenOptions={stackScreenOptions}>
+    <Stack.Navigator
+      screenOptions={stackScreenOptions}
+      initialRouteName="LoginHome"
+    >
       <Stack.Screen
         name="LoginHome"
         component={LoginHomeScreen}
@@ -88,7 +91,10 @@ const LoginFlow = () => {
 
 const TransactionFlow = () => {
   return (
-    <Stack.Navigator screenOptions={stackScreenOptions}>
+    <Stack.Navigator 
+      screenOptions={stackScreenOptions}
+      initialRouteName="License"
+    >
       <Stack.Screen
         name="License"
         component={LicenseScreen}
@@ -111,7 +117,10 @@ const TransactionFlow = () => {
 
 const HistoryFlow = () => {
   return (
-    <Stack.Navigator screenOptions={stackScreenOptions}>
+    <Stack.Navigator 
+      screenOptions={stackScreenOptions}
+      initialRouteName="History"
+    >
       <Stack.Screen
         name="History"
         component={HistoryScreen}
@@ -126,7 +135,10 @@ const HistoryFlow = () => {
 
 const SettingFlow = () => {
   return (
-    <Stack.Navigator screenOptions={stackScreenOptions}>
+    <Stack.Navigator 
+      screenOptions={stackScreenOptions}
+      initialRouteName="Setting"
+    >
       <Stack.Screen
         name="Setting"
         component={SettingScreen}
@@ -145,7 +157,10 @@ const SettingFlow = () => {
 
 const AdminFlow = () => {
   return (
-    <Stack.Navigator screenOptions={stackScreenOptions}>
+    <Stack.Navigator 
+      screenOptions={stackScreenOptions}
+      initialRouteName="UserHome"
+    >
       <Stack.Screen
         name="UserHome"
         component={UserHomeScreen}
