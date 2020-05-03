@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         flexDirection: 'row',
-        marginHorizontal: 30,
+        marginHorizontal: 20,
         marginBottom: 10
     },
     inputTitleStyle: {
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         borderColor: '#D4D4D4'
     },
     inputStyle: {
-        fontSize: 45,
+        fontSize: 35,
         textAlign: 'center'
     },
     errorMessage: {
