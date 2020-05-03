@@ -46,10 +46,14 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
     const unsubscribe = NetInfo.addEventListener(state => {
         console.log("Is Internet Reachable?", state.isInternetReachable);
         console.log("Is connected?", state.isConnected);
-        if (!state.isInternetReachable && !state.isConnected && networkError === false) {
-            setNetworkError(true);
-        } else if (state.isInternetReachable && state.isConnected && networkError === true) {
-            setNetworkError(false);
+        if (state.isInternetReachable === false || state.isConnected === false) {
+            if (networkError === false) {
+                setNetworkError(true);
+            }
+        } else {
+            if (networkError === true) {
+                setNetworkError(false);
+            }
         }
     });
     unsubscribe();
@@ -67,10 +71,14 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
             NetInfo.fetch().then(state => {
                 console.log("Is Internet Reachable?", state.isInternetReachable);
                 console.log("Is connected?", state.isConnected);
-                if (!state.isInternetReachable && !state.isConnected && networkError === false) {
-                    setNetworkError(true);
-                } else if (state.isInternetReachable && state.isConnected && networkError === true) {
-                    setNetworkError(false);
+                if (state.isInternetReachable === false || state.isConnected === false) {
+                    if (networkError === false) {
+                        setNetworkError(true);
+                    }
+                } else {
+                    if (networkError === true) {
+                        setNetworkError(false);
+                    }
                 }
             });
             console.log("App is in Active Foreground Mode.")
@@ -95,10 +103,14 @@ const Header = ({ navigation, title, backButton, headerRight, children, disableA
                                 NetInfo.fetch().then(state => {
                                     console.log("Is Internet Reachable?", state.isInternetReachable);
                                     console.log("Is connected?", state.isConnected);
-                                    if (!state.isInternetReachable || !state.isConnected) {
-                                        setNetworkError(true);
-                                    } else if (state.isInternetReachable && state.isConnected) {
-                                        setNetworkError(false);
+                                    if (state.isInternetReachable === false || state.isConnected === false) {
+                                        if (networkError === false) {
+                                            setNetworkError(true);
+                                        }
+                                    } else {
+                                        if (networkError === true) {
+                                            setNetworkError(false);
+                                        }
                                     }
                                 });
                             }}
